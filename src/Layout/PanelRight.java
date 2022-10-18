@@ -81,7 +81,7 @@ public class PanelRight extends javax.swing.JPanel {
 
         textInput1 = new Components.TextInput();
         jPanel1 = new javax.swing.JPanel();
-        imageAvatar1 = new Components.ImageAvatar();
+        imageAvatar1 = new Helper.ImageAvatar();
         jScrollPane1 = new javax.swing.JScrollPane();
         listMess1 = new Models.ListMess<>();
 
@@ -143,7 +143,7 @@ public class PanelRight extends javax.swing.JPanel {
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private Components.ImageAvatar imageAvatar1;
+    private Helper.ImageAvatar imageAvatar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private Models.ListMess<String> listMess1;

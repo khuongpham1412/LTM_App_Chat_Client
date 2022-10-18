@@ -62,7 +62,7 @@ public class MessItem extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        imageAvatar1 = new Components.ImageAvatar();
+        imageAvatar1 = new Helper.ImageAvatar();
         jPanel2 = new javax.swing.JPanel();
         lbName = new javax.swing.JLabel();
         lbMess = new javax.swing.JLabel();
@@ -138,7 +138,7 @@ public class MessItem extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private Components.ImageAvatar imageAvatar1;
+    private Helper.ImageAvatar imageAvatar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lbMess;

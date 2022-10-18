@@ -4,24 +4,19 @@
  */
 package Components;
 
+import Common.Common;
 import Enum.Status;
-import GUI.App;
 import Models.Account;
 import Models.RequestModel.DataRequest;
-import Models.ResponseModel.DataResponse;
-import Models.MessItemModel;
 import Models.Message;
 import Utils.Constants;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -31,11 +26,6 @@ import javax.swing.BorderFactory;
  * @author Asus
  */
 public class TextInput extends javax.swing.JPanel {
-
-    Socket socket = Constants.socket;
-    ObjectOutputStream oos = Constants.oos;
-    ObjectInputStream ois = Constants.ois;
-    private ArrayList<Account> accounts;
     /**
      * Creates new form TextInput
      */
@@ -87,53 +77,21 @@ public class TextInput extends javax.swing.JPanel {
     private void txtMessKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMessKeyPressed
         // TODO add your handling code here:
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            System.out.println("START SEND MESSAGER...");
+           System.out.println("START SEND MESSAGER...");
            try {
-               DataRequest request = new DataRequest();
+                DataRequest request = new DataRequest();
                 request.setName("SEND_MESSAGE_PRIVATE_REQUEST");
-                request.setStatus(Status.SUCCESS);
                 Message mess = new Message();
 //                mess.setId(UUID.randomUUID());
-                mess.setUser_send(Constants.id);
-                mess.setUser_receive(Constants.accounts.get(Constants.id_received).getId());
+                mess.setUser_send(Constants.infomation.getId());
+                mess.setUser_receive(Constants.id_received);
                 mess.setMessage(txtMess.getText().trim());
-
                 request.setRequest(mess);
+                request.setStatus(Status.SUCCESS);
                 txtMess.setText("");
                 
-                Constants.oos.writeObject(request);
-                Constants.oos.flush();
-                
-//                DataResponse<Message> data = new DataResponse<Message>();
-//                data.setName("NAME TEST THOI");
-                
-//                Constants.oos.writeObject(data);
-                
-//                Constants.os.write(txtMess.getText().trim());
-//                Constants.os.newLine();
-//                Constants.oos.flush();
-                
-                
-//                Thread t = new Thread(() -> {
-//                    DataResponse<Message> message;
-//                    while(true){
-//                        try {
-//                            message = (DataResponse<Message>) Constants.ois.readObject();
-//                            System.out.println("Message received from server: " + message.getName());
-//                            //close resources
-//                            //Constants.is.close();
-//                            //Constants.os.close();
-//                            //Constants.socket.close();
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(TextInput.class.getName()).log(Level.SEVERE, null, ex);
-//                        } catch (ClassNotFoundException ex) {
-//                            Logger.getLogger(TextInput.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//                });
-//                t.start();
-                    
-            } catch (Exception ex) {
+                Common.write(request);
+            } catch (IOException ex) {
                 Logger.getLogger(TextInput.class.getName()).log(Level.SEVERE, null, ex);
             }       
         }

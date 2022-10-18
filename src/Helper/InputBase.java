@@ -4,10 +4,16 @@
  */
 package Helper;
 
+import javax.swing.JTextField;
+
 /**
  *
  * @author Asus
  */
-public class CircleImage {
+public class InputBase extends JTextField{
     
+    
+    public InputBase(){
+        
+    }
 }
