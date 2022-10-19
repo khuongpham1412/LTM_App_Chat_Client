@@ -59,7 +59,7 @@ public class MessageRight extends javax.swing.JPanel {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(new Color(255,255,255));
         g2.fillRect(0, 0, getWidth(), getHeight());
-        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 50, 50);
         super.paintChildren(g);
     }
     

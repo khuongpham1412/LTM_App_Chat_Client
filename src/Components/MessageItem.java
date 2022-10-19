@@ -4,47 +4,39 @@
  */
 package Components;
 
+import Enum.StatusMessage;
 import Models.MessItemModel;
+import Models.ResponseModel.MessItemResponse;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
 
 /**
  *
  * @author Asus
  */
-public class MessItem extends javax.swing.JPanel {
+public class MessageItem extends javax.swing.JPanel {
     
     private boolean selected;
     /**
      * Creates new form MessItem
      */
-    public MessItem(MessItemModel messItemModel) {
+    public MessageItem(MessItemResponse messItemModel) {
         initComponents();
         setOpaque(false);
 //        setBorder(BorderFactory.createLineBorder(new Color(58,107,123)));
-        if(messItemModel.getMenuType() == MessItemModel.MenuType.MENU){
-//            lbIcon.setIcon(messUserModel.toIcon());
-//                lbIcon.setText(messItemModel.getIcon());
-              lbName.setText(messItemModel.getUsername());
-              lbMess.setText(messItemModel.getMessage());
-
-//            lbUsername.setText(messItemModel.getUsername());
-        }else if(messItemModel.getMenuType() == MessItemModel.MenuType.TITLE){
-//            lbIcon.setText(messItemModel.getUsername());
-//            lbIcon.setFont(new Font("sansserif", 1, 12));
-//            lbUsername.setVisible(false);
-              lbName.setText(messItemModel.getUsername());
-              lbMess.setText(messItemModel.getMessage());
-//              lbName.setText(messItemModel.getUsername());
+        if(!messItemModel.getStatus().equals(StatusMessage.SEEN)){
+            Font newLabelFont=new Font(lbName.getFont().getName(),Font.BOLD,lbName.getFont().getSize());
+            lbName.setText(messItemModel.getUsername());
+            lbName.setFont(newLabelFont);
+            lbMess.setText(messItemModel.getNewMessage());
         }else{
-            
+            lbName.setText(messItemModel.getUsername());
+            lbMess.setText(messItemModel.getNewMessage());
         }
+        
     }
 
     public void setSelected(boolean selected) {

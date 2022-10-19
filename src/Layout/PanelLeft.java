@@ -4,8 +4,10 @@
  */
 package Layout;
 
+import Common.EventJlistSelected;
 import Models.Account;
 import Models.MessItemModel;
+import Models.ResponseModel.MessItemResponse;
 import Utils.Constants;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -23,7 +25,12 @@ import javax.swing.JScrollPane;
  */
 public class PanelLeft extends javax.swing.JPanel {
     private ArrayList<Account> accounts;
+    private EventJlistSelected event;
     
+    public void addEventJListSelected(EventJlistSelected event){
+        this.event = event;
+        listMenu1.addEventJListSelected(event);
+    }
     /**
      * Creates new form PanelLeft
      */
@@ -36,20 +43,16 @@ public class PanelLeft extends javax.swing.JPanel {
         jScrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.getVerticalScrollBar().setBackground(new Color(98, 132, 255));
         jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(5, 0));
-        if(Constants.accounts != null){
+        if(Constants.messItems != null && !Constants.messItems.isEmpty()){
             init();
         }
     }
     
     public void init(){
-        Account account = null;
-        for(Account item : Constants.accounts){
-            if(item.getId() != Constants.infomation.getId()){
-                listMenu1.addItem(new MessItemModel(item.getId() ,item.getUsername(), "UI Elements", MessItemModel.MenuType.MENU));
-            }
-            else{
-                account = item;
-            }
+        MessItemResponse messItem = null;
+        for(MessItemResponse item : Constants.messItems){
+                listMenu1.addItem(new MessItemResponse(item.getAccountId() ,item.getRoomId(), item.getUsername(), item.getNewMessage(), item.getStatus()));
+            
         }
         
         listMenu1.repaint();
@@ -70,7 +73,7 @@ public class PanelLeft extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        listMenu1 = new Models.ListMenu<>();
+        listMenu1 = new Models.JListModel.JlistMessageItem<>();
 
         setOpaque(false);
         setPreferredSize(new java.awt.Dimension(285, 800));
@@ -134,11 +137,11 @@ public class PanelLeft extends javax.swing.JPanel {
     public void initMoving(JFrame frame){
         
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private Models.ListMenu<String> listMenu1;
+    private Models.JListModel.JlistMessageItem<String> listMenu1;
     // End of variables declaration//GEN-END:variables
 }

@@ -19,7 +19,7 @@ public class Conversation extends javax.swing.JPanel {
     public Conversation(Message message) {
         initComponents();
         setOpaque(false);
-        if(message.getUser_send() == Constants.id){
+        if(message.getUser_send().equals(Constants.infomation.getId())){
             messageRight2.setText(message.getMessage());
             messageLeft1.removeAll();
             messageLeft1.setVisible(false);

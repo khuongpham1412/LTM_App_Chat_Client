@@ -7,16 +7,21 @@ package Layout;
 import Enum.StatusMessage;
 import Enum.TypeMessage;
 import Models.Message;
+import Models.ResponseModel.MessItemResponse;
+import Utils.Constants;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
+import javax.swing.JList;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 /**
  *
@@ -24,7 +29,7 @@ import javax.swing.JScrollPane;
  */
 public class PanelRight extends javax.swing.JPanel {
 
-    private final ArrayList<Message> messages = new ArrayList<>();
+    private ArrayList<Message> messages = new ArrayList<>();
     /**
      * Creates new form PanelRight
      */
@@ -38,36 +43,54 @@ public class PanelRight extends javax.swing.JPanel {
         jScrollPane1.getVerticalScrollBar().setBackground(new Color(98, 132, 255));
         jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(5, 0));
         
-        
-        init();
+        jlistUserOnline2.setOpaque(false);
+        jlistUserOnline2.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+        jlistUserOnline2.setVisibleRowCount(10);
+        jScrollPane3.setOpaque(false);
+        jScrollPane3.getViewport().setOpaque(false);
+        jScrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        jScrollPane3.getHorizontalScrollBar().setBackground(new Color(98, 132, 255));
+        jScrollPane3.getHorizontalScrollBar().setPreferredSize(new Dimension(5, 0));
+        jScrollPane3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+//        init();
     }
     
-    private void init(){
-        messages.add(new Message(UUID.randomUUID(),"Hello khuong", TypeMessage.TEXT, new Date(), StatusMessage.RECEIVED, "1", 2, 1 ));
-        messages.add(new Message(UUID.randomUUID(),"Hello kiet", TypeMessage.TEXT, new Date(), StatusMessage.RECEIVED, "2", 1, 2));
-        messages.add(new Message(UUID.randomUUID(),"khong co gi", TypeMessage.TEXT, new Date(), StatusMessage.RECEIVED, "3" ,2,1));
-        messages.add(new Message(UUID.randomUUID(),"haizzzz", TypeMessage.TEXT, new Date(), StatusMessage.RECEIVED, "4" ,1, 2));
-        messages.add(new Message(UUID.randomUUID(),"dang lam gi do", TypeMessage.TEXT, new Date(), StatusMessage.RECEIVED, "5",2,1 ));
-        messages.add(new Message(UUID.randomUUID(),"xem hentai", TypeMessage.TEXT, new Date(), StatusMessage.RECEIVED, "6" ,1,2));
-        messages.add(new Message(UUID.randomUUID(),"xem chung khong", TypeMessage.TEXT, new Date(), StatusMessage.RECEIVED, "7",1,2 ));
-        messages.add(new Message(UUID.randomUUID(),"xem", TypeMessage.TEXT, new Date(), StatusMessage.RECEIVED, "8",2,1 ));
-        
-        for(Message item : messages){
+    public void setListMessage(ArrayList<Message> messages){
+        this.messages = messages;
+        listMess1.reset();
+        for(Message item : this.messages){
             listMess1.addItem(item);
         }
+        for(MessItemResponse item : Constants.messItems){
+            jlistUserOnline2.addItem(item);
+        }
         
-//        listMess1.indexToLocation(8);
-        JScrollBar vertical = jScrollPane1.getVerticalScrollBar();
-        vertical.setValue(9);
+        getLastMessage();
     }
     
-    public void test(Message mess){
-        messages.add(mess);
+//    private void init(){
 //        for(Message item : messages){
-        listMess1.addItem(mess);
+//            listMess1.addItem(item);
 //        }
-        JScrollBar vertical = jScrollPane1.getVerticalScrollBar();
-        vertical.setValue( vertical.getMaximum() );
+//        
+//        getLastMessage();
+//        
+//        JScrollBar vertical = jScrollPane1.getVerticalScrollBar();
+//        vertical.setValue(9);
+//        Point p = jScrollPane1.getViewport().getLocation();
+//        jScrollPane1.getViewport().setViewPosition(p);
+//    }
+    
+    public void sendNewMessage(Message mess){
+        this.messages.add(mess);
+        listMess1.addItem(mess);
+        getLastMessage();
+    }
+    
+    private void getLastMessage(){
+        int lastIndex = listMess1.getModel().getSize() - 1;
+        listMess1.ensureIndexIsVisible(lastIndex);
     }
 
     /**
@@ -80,53 +103,51 @@ public class PanelRight extends javax.swing.JPanel {
     private void initComponents() {
 
         textInput1 = new Components.TextInput();
-        jPanel1 = new javax.swing.JPanel();
-        imageAvatar1 = new Helper.ImageAvatar();
         jScrollPane1 = new javax.swing.JScrollPane();
-        listMess1 = new Models.ListMess<>();
+        listMess1 = new Models.JListModel.JlistConversation<>();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jlistUserOnline2 = new Models.JListModel.JlistUserOnline<>();
 
         setOpaque(false);
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setPreferredSize(new java.awt.Dimension(80, 100));
+        jScrollPane1.setViewportView(listMess1);
 
-        imageAvatar1.setImage(new javax.swing.ImageIcon(getClass().getResource("/Icon/8.png"))); // NOI18N
+        jPanel1.setOpaque(false);
+
+        jScrollPane3.setOpaque(false);
+
+        jScrollPane3.setViewportView(jlistUserOnline2);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(imageAvatar1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jScrollPane3)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(imageAvatar1, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
-
-        jScrollPane1.setViewportView(listMess1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 631, Short.MAX_VALUE)
-            .addComponent(textInput1, javax.swing.GroupLayout.DEFAULT_SIZE, 631, Short.MAX_VALUE)
+            .addComponent(textInput1, javax.swing.GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 454, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 557, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(textInput1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(textInput1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -143,10 +164,11 @@ public class PanelRight extends javax.swing.JPanel {
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private Helper.ImageAvatar imageAvatar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private Models.ListMess<String> listMess1;
+    private javax.swing.JScrollPane jScrollPane3;
+    private Models.JListModel.JlistUserOnline<String> jlistUserOnline2;
+    private Models.JListModel.JlistConversation<String> listMess1;
     private Components.TextInput textInput1;
     // End of variables declaration//GEN-END:variables
 }

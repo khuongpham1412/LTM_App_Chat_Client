@@ -128,6 +128,10 @@ public class Login extends javax.swing.JFrame {
             account.setPassword(password);
             request.setRequest(account);
             
+//            ClientThread client = new ClientThread();
+//            client.setLoginForm(this);
+            this.setVisible(false);
+            
             Constants.oos.writeObject(request);
             Constants.oos.flush();
             

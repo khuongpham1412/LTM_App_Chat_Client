@@ -9,5 +9,5 @@ package Enum;
  * @author Asus
  */
 public enum StatusMessage {
-    SEEN, RECEIVED
+    SENT, RECEIVED, SEEN
 }

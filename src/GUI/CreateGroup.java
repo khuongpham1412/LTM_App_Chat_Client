@@ -4,20 +4,73 @@
  */
 package GUI;
 
+import Components.ComponentLeftCreateGroup;
+import Models.JListModel.CreateGroupModel;
 import java.awt.Color;
+import java.awt.Dimension;
+import javax.swing.JScrollPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
  * @author Asus
  */
 public class CreateGroup extends javax.swing.JFrame {
-
+    CreateGroupModel data;
+    
     /**
      * Creates new form CreateGroup
      */
     public CreateGroup() {
         initComponents();
         this.getContentPane().setBackground(Color.white);
+        jScrollPane1.setOpaque(false);
+        jScrollPane1.getViewport().setOpaque(false);
+        jScrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane1.getVerticalScrollBar().setBackground(new Color(98, 132, 255));
+        jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(5, 0));
+        
+        jScrollPane2.setOpaque(false);
+        jScrollPane2.getViewport().setOpaque(false);
+        jScrollPane2.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane2.getVerticalScrollBar().setBackground(new Color(98, 132, 255));
+        jScrollPane2.getVerticalScrollBar().setPreferredSize(new Dimension(5, 0));
+        jlistComponentLeft1.addListSelectionListener(new ListSelectionListener(){
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                CreateGroupModel model = jlistComponentLeft1.getCreateGroupLeftModel();
+                if(model != null){
+                    jlistComponentRight1.addItem(model);
+                }
+                
+            }
+            
+        });
+        
+        init();
+    }
+    
+    public void setSelected(int position, boolean selected){
+        
+    }
+    
+    public void setCreateGroupLeftModel(CreateGroupModel data){
+        this.data = data;
+        System.out.println("DTA: "+data.getUsername());
+    }
+    
+    private void init(){
+        jlistComponentLeft1.addItem(new CreateGroupModel("", "Pham Duy Khuong", true));
+        jlistComponentLeft1.addItem(new CreateGroupModel("", "Ha Khang Ki", false));
+        jlistComponentLeft1.addItem(new CreateGroupModel("", "Vu Ba Kiet", false));
+        jlistComponentLeft1.addItem(new CreateGroupModel("", "Tran Dang Khoa", false));
+        jlistComponentLeft1.addItem(new CreateGroupModel("", "Le Van Tan", false));
+        jlistComponentLeft1.addItem(new CreateGroupModel("", "Chau Ngoc Khanh", false));
+        jlistComponentLeft1.addItem(new CreateGroupModel("", "Do Dinh Manh", true));
+        jlistComponentLeft1.addItem(new CreateGroupModel("", "Luong", false));
+        jlistComponentLeft1.addItem(new CreateGroupModel("", "Duy", false));
+        jlistComponentLeft1.addItem(new CreateGroupModel("", "Luan", false));
     }
 
     /**
@@ -31,7 +84,11 @@ public class CreateGroup extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jlistComponentLeft1 = new Models.JListModel.JlistCreateGroupLeft<>();
         jPanel3 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jlistComponentRight1 = new Models.JListModel.JlistCreateGroupRight<>();
         jPanel4 = new javax.swing.JPanel();
         btnCreateGroup = new Helper.ButtonBase();
         btnCancel = new Helper.ButtonBase();
@@ -50,26 +107,44 @@ public class CreateGroup extends javax.swing.JFrame {
             .addGap(0, 89, Short.MAX_VALUE)
         );
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setOpaque(false);
+
+        jScrollPane1.setViewportView(jlistComponentLeft1);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 403, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setOpaque(false);
+
+        jScrollPane2.setViewportView(jlistComponentRight1);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 278, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 410, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(49, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -78,6 +153,11 @@ public class CreateGroup extends javax.swing.JFrame {
         btnCreateGroup.setText("Create");
 
         btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -127,40 +207,45 @@ public class CreateGroup extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+    }//GEN-LAST:event_btnCancelActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CreateGroup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CreateGroup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CreateGroup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CreateGroup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new CreateGroup().setVisible(true);
-            }
-        });
-    }
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(CreateGroup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(CreateGroup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(CreateGroup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(CreateGroup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new CreateGroup().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private Helper.ButtonBase btnCancel;
@@ -169,5 +254,9 @@ public class CreateGroup extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private Models.JListModel.JlistCreateGroupLeft<String> jlistComponentLeft1;
+    private Models.JListModel.JlistCreateGroupRight<String> jlistComponentRight1;
     // End of variables declaration//GEN-END:variables
 }

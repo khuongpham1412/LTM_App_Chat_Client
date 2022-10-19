@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Models;
+package Models.JListModel;
 
-import Components.MessItem;
+import Components.ComponentLeftCreateGroup;
+import Models.MessItemModel;
 import Utils.Constants;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
@@ -19,12 +20,11 @@ import javax.swing.SwingUtilities;
  *
  * @author Asus
  */
-public class ListMenu<E extends Object> extends JList<E>{
-    
+public class JlistCreateGroupLeft <E extends Object> extends JList<E>{
     private final DefaultListModel model;
     private int selectedIndex = -1;
     
-    public ListMenu(){
+    public JlistCreateGroupLeft(){
         model = new DefaultListModel();
         setModel(model);
         setOpaque(false);
@@ -35,15 +35,10 @@ public class ListMenu<E extends Object> extends JList<E>{
                     int index = locationToIndex(e.getPoint());
                     Object obj = model.getElementAt(index);
                     if(obj instanceof MessItemModel){
-                        MessItemModel messItemModel = (MessItemModel) obj;
-                        if(messItemModel.getMenuType() == MessItemModel.MenuType.MENU){
-                            System.out.println("index: "+index);
-                            MessItemModel item = (MessItemModel) model.getElementAt(index);
-                            System.out.println("ID: "+item.getId()+" USERNAME: "+item.getUsername());
-                            //KHI CLICK VÀO CÂN GOI SU KIÊN REQUEST_GET_ALL_MESSAGE_BY_USER_ID
-                            Constants.id_received = item.getId();
-                            selectedIndex = index;
-                        }
+                        CreateGroupModel createGroupLeftModel = (CreateGroupModel) obj;
+                        CreateGroupModel item = (CreateGroupModel) model.getElementAt(index);
+                        item.setSelected(!item.isSelected());
+                        selectedIndex = index;
                     }else{
                         selectedIndex = index;
                     }
@@ -52,7 +47,6 @@ public class ListMenu<E extends Object> extends JList<E>{
                 }
             }
         });
-        
     }
 
     @Override
@@ -60,26 +54,40 @@ public class ListMenu<E extends Object> extends JList<E>{
         return new DefaultListCellRenderer(){
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                MessItemModel data;
-                if(value instanceof MessItemModel){
-                    data = (MessItemModel)value;
+                CreateGroupModel data;
+                if(value instanceof CreateGroupModel){
+                    data = (CreateGroupModel)value;
                 }else{
-                    data = new MessItemModel(0,"",value + "",MessItemModel.MenuType.EMPTY);
+                    data = new CreateGroupModel("","Khuong", false);
                 }
-//                if(isSelected){
-//                    System.out.println("INDEX: "+ index);
-//                }
-
-                MessItem item = new MessItem(data);
+                
+                ComponentLeftCreateGroup item = new ComponentLeftCreateGroup(data);
                 item.setSelected(selectedIndex == index);
+                if(isSelected){
+                    
+                }
+                
                 return item;
             }
             
         };
     }
     
-    public void addItem(MessItemModel data){
+    public void addItem(CreateGroupModel data){
         model.addElement(data);
+    }
+    
+    public CreateGroupModel getCreateGroupLeftModel(){
+        if(selectedIndex != -1){
+            CreateGroupModel data = (CreateGroupModel) model.getElementAt(selectedIndex);
+            selectedIndex = -1;
+            return data;
+        }
+        return null;
+    }
+    
+    public void resetList(){
+        model.removeAllElements();
     }
     
 }

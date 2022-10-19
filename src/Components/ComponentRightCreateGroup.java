@@ -4,17 +4,24 @@
  */
 package Components;
 
+import Models.JListModel.CreateGroupModel;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+
 /**
  *
  * @author Asus
  */
 public class ComponentRightCreateGroup extends javax.swing.JPanel {
-
+    private boolean selected = false;
     /**
      * Creates new form ComponentRightCreateGroup
      */
-    public ComponentRightCreateGroup() {
+    public ComponentRightCreateGroup(CreateGroupModel model) {
         initComponents();
+        lbName.setText(model.getUsername());
     }
 
     /**
@@ -28,21 +35,26 @@ public class ComponentRightCreateGroup extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         imageAvatar1 = new Helper.ImageAvatar();
-        jLabel1 = new javax.swing.JLabel();
+        lbName = new javax.swing.JLabel();
         buttonBase1 = new Helper.ButtonBase();
 
         setOpaque(false);
 
         jPanel1.setOpaque(false);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel1.setText("Name");
+        lbName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbName.setText("Name");
 
         buttonBase1.setBackground(new java.awt.Color(255, 0, 0));
         buttonBase1.setBorder(null);
         buttonBase1.setForeground(new java.awt.Color(255, 255, 255));
         buttonBase1.setText("X");
         buttonBase1.setBorderColor(new java.awt.Color(255, 0, 51));
+        buttonBase1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonBase1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -52,9 +64,9 @@ public class ComponentRightCreateGroup extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(imageAvatar1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lbName, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(buttonBase1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(buttonBase1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -65,8 +77,8 @@ public class ComponentRightCreateGroup extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(1, 1, 1)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                            .addComponent(buttonBase1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(lbName, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                            .addComponent(buttonBase1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(imageAvatar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -75,10 +87,9 @@ public class ComponentRightCreateGroup extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -88,11 +99,29 @@ public class ComponentRightCreateGroup extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void buttonBase1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonBase1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonBase1ActionPerformed
+@Override
+    protected void paintChildren(Graphics g) {
+        if(selected){
+            Graphics2D g2 = (Graphics2D)g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(new Color(134, 234, 242, 80));
+            g2.fillRect(0, 0, getWidth(), getHeight());
+            g2.fillRoundRect(10, 0, getWidth() - 20, getHeight(), 5, 5);
+        }
+        super.paintChildren(g);
+    }
+    
+    public void setSelected(boolean selected){
+        this.selected = selected;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private Helper.ButtonBase buttonBase1;
     private Helper.ImageAvatar imageAvatar1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lbName;
     // End of variables declaration//GEN-END:variables
 }

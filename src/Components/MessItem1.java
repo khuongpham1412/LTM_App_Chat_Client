@@ -19,11 +19,11 @@ public class MessItem1 extends javax.swing.JPanel {
     public MessItem1(Message message) {
         initComponents();
         setOpaque(false);
-        if(message.getUser_send() == Constants.id){
-            messR.setText(message.getMessage());
-        }else{
-            messL.setText(message.getMessage());
-        }
+//        if(message.getUser_send() == Constants.id){
+//            messR.setText(message.getMessage());
+//        }else{
+//            messL.setText(message.getMessage());
+//        }
     }
 
     /**

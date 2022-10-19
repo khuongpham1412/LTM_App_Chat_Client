@@ -4,6 +4,8 @@
  */
 package GUI;
 
+import Common.EventJlistSelected;
+import Layout.PanelRight;
 import Models.Account;
 import Models.Message;
 import Utils.Constants;
@@ -16,6 +18,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComponent;
 
 /**
  *
@@ -28,20 +31,30 @@ public class App extends javax.swing.JFrame {
     public static ObjectInputStream ois;
     public static String test;
     public static int idUser = -1;
+    public PanelRight panelRight= new PanelRight();
     
     /**
      * Creates new form App
      * @param accounts
      */
-    public App(ArrayList<Account> accounts) {
-        Constants.accounts = accounts;
+    public App() {
         initComponents();
         setBackground(new Color(0, 0, 0, 0));
+        panelLeft2.addEventJListSelected(new EventJlistSelected() {
+            @Override
+            public void selected(int index) {
+                setPanel(panelRight);
+            }
+        });
 //        connnect();
     }
     
-    public void test(Message mess){
-        panelRight2.test(mess);
+    public void setListMessage(ArrayList<Message> messages){
+        panelRight.setListMessage(messages);
+    }
+    
+    public void sendNewMessage(Message mess){
+        panelRight.sendNewMessage(mess);
     }
     
     private void connnect() {
@@ -95,10 +108,21 @@ public class App extends javax.swing.JFrame {
 
         panelBorder1 = new Components.PanelBorder();
         panelLeft2 = new Layout.PanelLeft();
-        panelRight2 = new Layout.PanelRight();
+        jButton1 = new javax.swing.JButton();
+        panelContent = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+
+        jButton1.setText("Group");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        panelContent.setOpaque(false);
+        panelContent.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);
         panelBorder1.setLayout(panelBorder1Layout);
@@ -106,15 +130,20 @@ public class App extends javax.swing.JFrame {
             panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBorder1Layout.createSequentialGroup()
                 .addComponent(panelLeft2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelRight2, javax.swing.GroupLayout.DEFAULT_SIZE, 1105, Short.MAX_VALUE))
+                .addGap(1, 1, 1)
+                .addComponent(panelContent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1214, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(29, 29, 29))
         );
         panelBorder1Layout.setVerticalGroup(
             panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelLeft2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(panelLeft2, javax.swing.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE)
             .addGroup(panelBorder1Layout.createSequentialGroup()
-                .addComponent(panelRight2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(60, 60, 60)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(panelContent, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -122,8 +151,8 @@ public class App extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(panelBorder1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(panelBorder1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -133,6 +162,12 @@ public class App extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        CreateGroup group = new CreateGroup();
+        group.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -193,10 +228,17 @@ public class App extends javax.swing.JFrame {
 //        }
 //        return null;
 //    }
-
+    
+    private void setPanel(JComponent comp){
+        panelContent.removeAll();
+        panelContent.add(comp);
+        panelContent.repaint();
+        panelContent.revalidate();
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private Components.PanelBorder panelBorder1;
+    private javax.swing.JPanel panelContent;
     private Layout.PanelLeft panelLeft2;
-    private Layout.PanelRight panelRight2;
     // End of variables declaration//GEN-END:variables
 }

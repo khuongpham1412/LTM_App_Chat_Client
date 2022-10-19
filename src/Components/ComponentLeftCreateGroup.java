@@ -4,17 +4,28 @@
  */
 package Components;
 
+import Models.JListModel.CreateGroupModel;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+
 /**
  *
  * @author Asus
  */
 public class ComponentLeftCreateGroup extends javax.swing.JPanel {
-
+    private boolean selected = false;
+    
     /**
      * Creates new form ComponentLeftCreateGroup
      */
-    public ComponentLeftCreateGroup() {
+    public ComponentLeftCreateGroup(CreateGroupModel model) {
         initComponents();
+        lbName.setText(model.getUsername());
+        if(model.isSelected()){
+            jCheckBox1.setSelected(true);
+        }
     }
 
     /**
@@ -28,14 +39,20 @@ public class ComponentLeftCreateGroup extends javax.swing.JPanel {
 
         jCheckBox1 = new javax.swing.JCheckBox();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        lbName = new javax.swing.JLabel();
         imageAvatar1 = new Helper.ImageAvatar();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setOpaque(false);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel1.setText("Name");
+        jCheckBox1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setOpaque(false);
+
+        lbName.setBackground(new java.awt.Color(255, 255, 255));
+        lbName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbName.setText("Name");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -44,7 +61,7 @@ public class ComponentLeftCreateGroup extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addComponent(imageAvatar1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lbName, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -53,7 +70,7 @@ public class ComponentLeftCreateGroup extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(imageAvatar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE))
+                    .addComponent(lbName, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -78,12 +95,28 @@ public class ComponentLeftCreateGroup extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-
+    @Override
+    protected void paintChildren(Graphics g) {
+        if(selected){
+            Graphics2D g2 = (Graphics2D)g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(new Color(134, 234, 242, 80));
+            g2.fillRect(0, 0, getWidth(), getHeight());
+            g2.fillRoundRect(10, 0, getWidth() - 20, getHeight(), 5, 5);
+            jCheckBox1.setSelected(true);
+        }
+        super.paintChildren(g);
+    }
+    
+    public void setSelected(boolean selected){
+        this.selected = selected;
+    }
+    
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private Helper.ImageAvatar imageAvatar1;
     private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lbName;
     // End of variables declaration//GEN-END:variables
 }
