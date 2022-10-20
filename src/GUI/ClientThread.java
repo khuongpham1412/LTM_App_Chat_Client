@@ -92,7 +92,15 @@ public class ClientThread implements Runnable{
                     case "SEND_MESSAGE_PRIVATE_RESPONSE" ->  {
                         if(response.getStatus().equals(Status.SUCCESS)){
                             Message mess = (Message) response.getData();
-                            app.sendNewMessage(mess);
+                            if(Constants.currentPosition != null){
+                                if(mess.getUser_send().equals(Constants.currentPosition.getAccountId())){
+                                    app.sendNewMessage(mess);
+                                }
+                            }
+                            if(Constants.infomation.getId().equals(mess.getUser_send())){
+                                app.sendNewMessage(mess);
+                            }
+                            
 
                             System.out.println("MESSAGE: "+mess.getMessage());
                         }

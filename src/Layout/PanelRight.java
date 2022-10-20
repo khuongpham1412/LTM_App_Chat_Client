@@ -4,8 +4,6 @@
  */
 package Layout;
 
-import Enum.StatusMessage;
-import Enum.TypeMessage;
 import Models.Message;
 import Models.ResponseModel.MessItemResponse;
 import Utils.Constants;
@@ -14,12 +12,8 @@ import java.awt.Dimension;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.UUID;
 import javax.swing.JList;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
@@ -48,7 +42,7 @@ public class PanelRight extends javax.swing.JPanel {
         jlistUserOnline2.setVisibleRowCount(10);
         jScrollPane3.setOpaque(false);
         jScrollPane3.getViewport().setOpaque(false);
-        jScrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        jScrollPane3.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         jScrollPane3.getHorizontalScrollBar().setBackground(new Color(98, 132, 255));
         jScrollPane3.getHorizontalScrollBar().setPreferredSize(new Dimension(5, 0));
         jScrollPane3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
