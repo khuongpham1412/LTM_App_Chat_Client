@@ -49,12 +49,20 @@ public class App extends javax.swing.JFrame {
 //        connnect();
     }
     
+    public void resetPanelLeft(){
+        panelLeft2.resetPanelLeft();
+    }
+    
     public void setListMessage(ArrayList<Message> messages){
         panelRight.setListMessage(messages);
     }
     
     public void sendNewMessage(Message mess){
         panelRight.sendNewMessage(mess);
+    }
+    
+    public void updateStatusMessage(Message message){
+        panelRight.updateStatusMessage(message);
     }
     
     private void connnect() {

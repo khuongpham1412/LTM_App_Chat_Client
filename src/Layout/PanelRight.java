@@ -63,6 +63,10 @@ public class PanelRight extends javax.swing.JPanel {
         getLastMessage();
     }
     
+    public void updateStatusMessage(Message message){
+        listMess1.update(message, this.messages.size()-1);
+    }
+    
 //    private void init(){
 //        for(Message item : messages){
 //            listMess1.addItem(item);

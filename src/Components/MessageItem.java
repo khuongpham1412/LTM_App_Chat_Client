@@ -28,11 +28,14 @@ public class MessageItem extends javax.swing.JPanel {
         setOpaque(false);
 //        setBorder(BorderFactory.createLineBorder(new Color(58,107,123)));
         if(!messItemModel.getStatus().equals(StatusMessage.SEEN)){
+            System.out.println("NOT SEEN");
             Font newLabelFont=new Font(lbName.getFont().getName(),Font.BOLD,lbName.getFont().getSize());
             lbName.setText(messItemModel.getUsername());
             lbName.setFont(newLabelFont);
+            lbMess.setFont(newLabelFont);
             lbMess.setText(messItemModel.getNewMessage());
         }else{
+            System.out.println("SEEN");
             lbName.setText(messItemModel.getUsername());
             lbMess.setText(messItemModel.getNewMessage());
         }
@@ -94,7 +97,7 @@ public class MessageItem extends javax.swing.JPanel {
                 .addGap(15, 15, 15)
                 .addComponent(lbName, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbMess, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lbMess, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 

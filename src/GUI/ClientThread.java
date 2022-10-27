@@ -11,6 +11,7 @@ import Models.Account;
 import Models.RequestModel.DataRequest;
 import Models.ResponseModel.DataResponse;
 import Models.Message;
+import Models.RequestModel.UpdateStatusMessageRequest;
 import Models.ResponseModel.MessItemResponse;
 import Utils.Constants;
 import java.io.IOException;
@@ -95,14 +96,79 @@ public class ClientThread implements Runnable{
                             if(Constants.currentPosition != null){
                                 if(mess.getUser_send().equals(Constants.currentPosition.getAccountId())){
                                     app.sendNewMessage(mess);
-                                }
+                                }                              
                             }
                             if(Constants.infomation.getId().equals(mess.getUser_send())){
                                 app.sendNewMessage(mess);
                             }
+//                            DataRequest request = new DataRequest();
+//                            request.setName("RESET_PANEL_LEFT_REQUEST");
+//                            request.setRequest(Constants.infomation.getId());
+//                            request.setStatus(Status.SUCCESS);
+//
+//                            write(request);
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+
+                            DataRequest request = new DataRequest();
+                            request.setName("UPDATE_STATUS_MESSAGE_REQUEST");
+                            mess.setStatus(StatusMessage.RECEIVED.toString());
+                            request.setRequest(mess);
+                            request.setStatus(Status.SUCCESS);
+
+                            write(request);
+                            //System.out.println("MESSAGE: "+mess.getMessage());
+                        }
+                    }
+                    case "UPDATE_STATUS_MESSAGE_RESPONSE" -> {
+                        Message mess = (Message) response.getData();
+                        
+                        if(mess.getStatus().equals(StatusMessage.RECEIVED.toString())){
+                            if(Constants.currentPosition != null){
+                                if(mess.getUser_send().equals(Constants.currentPosition.getAccountId())){
+                                    System.out.println("1");
+                                    app.updateStatusMessage(mess);
+                                   
+                                    try {
+                                        Thread.sleep(2000);
+                                    } catch (InterruptedException ex) {
+                                        Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                    DataRequest request = new DataRequest();
+                                    request.setName("UPDATE_STATUS_MESSAGE_REQUEST");
+                                    mess.setStatus(StatusMessage.SEEN.toString());
+                                    System.out.println("sdfdgf"+mess.getStatus());
+                                    request.setRequest(mess);
+                                    request.setStatus(Status.SUCCESS);
+
+                                    write(request);
+                                }                          
+                            }
+                        if(Constants.infomation.getId().equals(mess.getUser_send())){
+                                System.out.println("2");
+                                System.out.println("sttus"+mess.getStatus());
+                                app.updateStatusMessage(mess);
+                            }    
+                            
+                        }
+                        if(mess.getStatus().equals(StatusMessage.SEEN.toString())){
+                            System.out.println("3: "+mess.getStatus());
+                            app.updateStatusMessage(mess);
+                        }
+//                        else if(Constants.currentPosition== null){
+//                            System.out.println("xu ly panel letf");
+//                        }
                             
 
-                            System.out.println("MESSAGE: "+mess.getMessage());
+                    }
+                    case "RESET_PANEL_LEFT_RESPONSE" -> {
+                        if(response.getStatus().equals(Status.SUCCESS)){
+                            ArrayList<MessItemResponse> messItems = (ArrayList<MessItemResponse>) response.getData();
+                            Constants.messItems = messItems;
+                            app.resetPanelLeft();
                         }
                     }
                     default ->  {

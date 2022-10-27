@@ -113,4 +113,8 @@ public class JlistMessageItem<E extends Object> extends JList<E>{
         model.addElement(data);
     }
     
+    public void reset(){
+        model.removeAllElements();
+    }
+    
 }

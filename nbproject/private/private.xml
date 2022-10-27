@@ -6,7 +6,10 @@
             <file>file:/D:/SGU/JavaSwing/LTM-AppChatClient/src/GUI/Login.java</file>
             <file>file:/D:/SGU/JavaSwing/LTM-AppChatClient/src/GUI/ClientThread.java</file>
             <file>file:/D:/SGU/JavaSwing/LTM-AppChatClient/src/GUI/App.java</file>
+            <file>file:/D:/SGU/JavaSwing/LTM-AppChatClient/src/Components/TextInput.java</file>
+            <file>file:/D:/SGU/JavaSwing/LTM-AppChatClient/src/Models/JListModel/JlistMessageItem.java</file>
             <file>file:/D:/SGU/JavaSwing/LTM-AppChatClient/src/Layout/PanelRight.java</file>
+            <file>file:/D:/SGU/JavaSwing/LTM-AppChatClient/src/Models/JListModel/JlistConversation.java</file>
         </group>
     </open-files>
 </project-private>

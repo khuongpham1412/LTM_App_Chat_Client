@@ -88,4 +88,9 @@ public class JlistConversation<E extends Object> extends JList<E>{
         model.removeAllElements();
     }
     
+    public void update(Message message, int index){
+        System.out.println("ind: "+index);
+        model.setElementAt(message, index);
+    }
+    
 }
