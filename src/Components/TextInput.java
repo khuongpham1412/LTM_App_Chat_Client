@@ -78,7 +78,7 @@ public class TextInput extends javax.swing.JPanel {
            System.out.println("START SEND MESSAGER...");
            try {
                 DataRequest request = new DataRequest();
-                request.setName("SEND_MESSAGE_PRIVATE_REQUEST");
+                
                 Message mess = new Message();
                 mess.setId(UUID.randomUUID().toString());
                 mess.setMessage(txtMess.getText().trim());
@@ -86,13 +86,20 @@ public class TextInput extends javax.swing.JPanel {
                 mess.setStatus(StatusMessage.SENT.toString());
                 mess.setIdRoom(Constants.currentPosition.getRoomId());
                 mess.setUser_send(Constants.infomation.getId());
-                mess.setUser_receive(Constants.currentPosition.getAccountId());
-                
-                request.setRequest(mess);
                 request.setStatus(Status.SUCCESS);
+                if(Constants.currentPosition.getType().equals("PRIVATE")){
+                    request.setName("SEND_MESSAGE_PRIVATE_REQUEST");
+                    mess.setUser_receive(Constants.currentPosition.getAccountId());
+                    request.setRequest(mess);
+                    Common.write(request);
+                    
+                }else{
+                    request.setName("SEND_MESSAGE_GROUP_REQUEST");
+                    mess.setUser_receive("ALL");
+                    request.setRequest(mess);
+                    Common.write(request);
+                }
                 txtMess.setText("");
-                
-                Common.write(request);
             } catch (IOException ex) {
                 Logger.getLogger(TextInput.class.getName()).log(Level.SEVERE, null, ex);
             }       

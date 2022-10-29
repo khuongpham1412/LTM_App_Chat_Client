@@ -22,7 +22,7 @@ public class ComponentLeftCreateGroup extends javax.swing.JPanel {
      */
     public ComponentLeftCreateGroup(CreateGroupModel model) {
         initComponents();
-        lbName.setText(model.getUsername());
+        lbName.setText(model.getAccount().getUsername());
         if(model.isSelected()){
             jCheckBox1.setSelected(true);
         }

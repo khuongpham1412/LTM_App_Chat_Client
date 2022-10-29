@@ -71,7 +71,6 @@ public class JlistMessageItem<E extends Object> extends JList<E>{
                             } catch (IOException ex) {
                                 Logger.getLogger(TextInput.class.getName()).log(Level.SEVERE, null, ex);
                             }       
-                            Constants.id_received = item.getAccountId();
                             selectedIndex = index;
                             event.selected(index);
                             }
@@ -95,7 +94,7 @@ public class JlistMessageItem<E extends Object> extends JList<E>{
                 if(value instanceof MessItemResponse){
                     data = (MessItemResponse)value;
                 }else{
-                    data = new MessItemResponse("1" ,"1", "1", "1", "1");
+                    data = new MessItemResponse();
                 }
                 if(isSelected){
                     //System.out.println("INDEX: "+ index);

@@ -4,13 +4,23 @@
  */
 package GUI;
 
-import Components.ComponentLeftCreateGroup;
+import Enum.Status;
+import Models.Account;
 import Models.JListModel.CreateGroupModel;
+import Models.RequestModel.CreateGroupChatRequest;
+import Models.RequestModel.DataRequest;
+import Utils.Constants;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.UUID;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import Common.Common;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -18,6 +28,8 @@ import javax.swing.event.ListSelectionListener;
  */
 public class CreateGroup extends javax.swing.JFrame {
     CreateGroupModel data;
+    private ArrayList<Account> accounts = new ArrayList<>();
+    private ArrayList<CreateGroupModel> selectedAccount = new ArrayList<>(); 
     
     /**
      * Creates new form CreateGroup
@@ -42,6 +54,7 @@ public class CreateGroup extends javax.swing.JFrame {
                 CreateGroupModel model = jlistComponentLeft1.getCreateGroupLeftModel();
                 if(model != null){
                     jlistComponentRight1.addItem(model);
+                    selectedAccount.add(model);
                 }
                 
             }
@@ -57,20 +70,17 @@ public class CreateGroup extends javax.swing.JFrame {
     
     public void setCreateGroupLeftModel(CreateGroupModel data){
         this.data = data;
-        System.out.println("DTA: "+data.getUsername());
+        //System.out.println("DTA: "+data.getUsername());
     }
     
     private void init(){
-        jlistComponentLeft1.addItem(new CreateGroupModel("", "Pham Duy Khuong", true));
-        jlistComponentLeft1.addItem(new CreateGroupModel("", "Ha Khang Ki", false));
-        jlistComponentLeft1.addItem(new CreateGroupModel("", "Vu Ba Kiet", false));
-        jlistComponentLeft1.addItem(new CreateGroupModel("", "Tran Dang Khoa", false));
-        jlistComponentLeft1.addItem(new CreateGroupModel("", "Le Van Tan", false));
-        jlistComponentLeft1.addItem(new CreateGroupModel("", "Chau Ngoc Khanh", false));
-        jlistComponentLeft1.addItem(new CreateGroupModel("", "Do Dinh Manh", true));
-        jlistComponentLeft1.addItem(new CreateGroupModel("", "Luong", false));
-        jlistComponentLeft1.addItem(new CreateGroupModel("", "Duy", false));
-        jlistComponentLeft1.addItem(new CreateGroupModel("", "Luan", false));
+        this.accounts = Constants.accounts;
+        for(Account item : this.accounts){
+            if(!Constants.infomation.getId().equals(item.getId())){
+                jlistComponentLeft1.addItem(new CreateGroupModel(item, false));
+            }
+            
+        }
     }
 
     /**
@@ -151,6 +161,16 @@ public class CreateGroup extends javax.swing.JFrame {
         jPanel4.setOpaque(false);
 
         btnCreateGroup.setText("Create");
+        btnCreateGroup.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCreateGroupMouseClicked(evt);
+            }
+        });
+        btnCreateGroup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateGroupActionPerformed(evt);
+            }
+        });
 
         btnCancel.setText("Cancel");
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
@@ -211,6 +231,31 @@ public class CreateGroup extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.setVisible(false);
     }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnCreateGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateGroupActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_btnCreateGroupActionPerformed
+
+    private void btnCreateGroupMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCreateGroupMouseClicked
+        // TODO add your handling code here:
+        try {
+            ArrayList<String> listIdAccounts = new ArrayList<>();
+            listIdAccounts.add(Constants.infomation.getId());
+            for(CreateGroupModel item : this.selectedAccount){
+                listIdAccounts.add(item.getAccount().getId());
+            }
+            DataRequest request = new DataRequest();
+            request.setName("CREATE_GROUP_CHAT_REQUEST");
+            request.setStatus(Status.SUCCESS);
+            CreateGroupChatRequest data = new CreateGroupChatRequest(UUID.randomUUID().toString(), listIdAccounts);
+            request.setRequest(data);
+            
+            Common.write(request);
+        } catch (IOException ex) {
+            Logger.getLogger(CreateGroup.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnCreateGroupMouseClicked
 
     /**
      * @param args the command line arguments

@@ -86,9 +86,14 @@ public class ClientThread implements Runnable{
                             app.setVisible(true);
                         }
                     }
+                    case "CREATE_GROUP_CHAT_RESPONSE" -> {
+                        System.out.println("");
+                    }
                     case "GET_ALL_MESSAGE_BY_ROOM_ID_RESPONSE" -> {
                         ArrayList<Message> messages = (ArrayList<Message>) response.getData();
-                        app.setListMessage(messages);
+                        if(messages != null){
+                            app.setListMessage(messages);
+                        }
                     }
                     case "SEND_MESSAGE_PRIVATE_RESPONSE" ->  {
                         if(response.getStatus().equals(Status.SUCCESS)){
@@ -120,7 +125,19 @@ public class ClientThread implements Runnable{
                             request.setStatus(Status.SUCCESS);
 
                             write(request);
-                            //System.out.println("MESSAGE: "+mess.getMessage());
+                        }
+                    }
+                    case "SEND_MESSAGE_GROUP_RESPONSE" ->  {
+                        if(response.getStatus().equals(Status.SUCCESS)){
+                            Message mess = (Message) response.getData();
+                            if(Constants.currentPosition != null){
+                                if(mess.getIdRoom().equals(Constants.currentPosition.getRoomId()) && !Constants.infomation.getId().equals(mess.getUser_send())){
+                                    app.sendNewMessage(mess);
+                                }                              
+                            }
+                            if(Constants.infomation.getId().equals(mess.getUser_send())){
+                                app.sendNewMessage(mess);
+                            }
                         }
                     }
                     case "UPDATE_STATUS_MESSAGE_RESPONSE" -> {

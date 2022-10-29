@@ -4,38 +4,31 @@
  */
 package Models.JListModel;
 
+import Models.Account;
+
 /**
  *
  * @author Asus
  */
 public class CreateGroupModel {
-    private String imageAvater;
-    private String username;
+    private Account account;
     private boolean selected;
+    
     
     public CreateGroupModel(){
     }
 
-    public CreateGroupModel(String imageAvater, String username, boolean selected) {
-        this.imageAvater = imageAvater;
-        this.username = username;
+    public CreateGroupModel(Account account, boolean selected) {
+        this.account = account;
         this.selected = selected;
     }
 
-    public String getImageAvater() {
-        return imageAvater;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setImageAvater(String imageAvater) {
-        this.imageAvater = imageAvater;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public boolean isSelected() {
@@ -45,4 +38,6 @@ public class CreateGroupModel {
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
+
+    
 }

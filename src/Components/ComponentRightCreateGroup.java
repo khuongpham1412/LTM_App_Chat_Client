@@ -21,7 +21,7 @@ public class ComponentRightCreateGroup extends javax.swing.JPanel {
      */
     public ComponentRightCreateGroup(CreateGroupModel model) {
         initComponents();
-        lbName.setText(model.getUsername());
+        lbName.setText(model.getAccount().getUsername());
     }
 
     /**

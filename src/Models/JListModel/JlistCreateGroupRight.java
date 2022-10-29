@@ -59,7 +59,7 @@ public class JlistCreateGroupRight <E extends Object> extends JList<E>{
                 if(value instanceof CreateGroupModel){
                     data = (CreateGroupModel)value;
                 }else{
-                    data = new CreateGroupModel("","Khuong", false);
+                    data = new CreateGroupModel();
                 }
                 if(isSelected){
                     System.out.println(index);

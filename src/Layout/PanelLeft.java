@@ -56,7 +56,7 @@ public class PanelLeft extends javax.swing.JPanel {
         listMenu1.reset();
         MessItemResponse messItem = null;
         for(MessItemResponse item : Constants.messItems){
-                listMenu1.addItem(new MessItemResponse(item.getAccountId() ,item.getRoomId(), item.getUsername(), item.getNewMessage(), item.getStatus()));
+                listMenu1.addItem(new MessItemResponse(item.getAccountId() ,item.getRoomId(), item.getUsername(), item.getNewMessage(), item.getStatus(), item.getType()));
             
         }
         

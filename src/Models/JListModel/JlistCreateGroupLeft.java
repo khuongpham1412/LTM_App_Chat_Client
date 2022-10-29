@@ -6,7 +6,6 @@ package Models.JListModel;
 
 import Components.ComponentLeftCreateGroup;
 import Models.MessItemModel;
-import Utils.Constants;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -58,7 +57,7 @@ public class JlistCreateGroupLeft <E extends Object> extends JList<E>{
                 if(value instanceof CreateGroupModel){
                     data = (CreateGroupModel)value;
                 }else{
-                    data = new CreateGroupModel("","Khuong", false);
+                    data = new CreateGroupModel();
                 }
                 
                 ComponentLeftCreateGroup item = new ComponentLeftCreateGroup(data);

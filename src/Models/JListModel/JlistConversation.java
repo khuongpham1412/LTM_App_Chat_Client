@@ -67,7 +67,7 @@ public class JlistConversation<E extends Object> extends JList<E>{
                 if(value instanceof Message){
                     data = (Message)value;
                 }else{
-                    data = new Message(UUID.randomUUID().toString(),"", TypeMessage.TEXT.toString(), new Date(), StatusMessage.RECEIVED.toString(), "", "1","2");
+                    data = new Message();
                 }
                 if(isSelected){
                     System.out.println(index);
