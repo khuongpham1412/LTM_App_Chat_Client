@@ -4,14 +4,26 @@
  */
 package Models.JListModel;
 
+import Common.Common;
 import Components.ComponentUserOnline;
+import Components.TextInput;
+import Enum.Status;
+import Models.RequestModel.DataRequest;
+import Models.RequestModel.GetAllMessageRequest;
 import Models.ResponseModel.MessItemResponse;
+import Utils.Constants;
 import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -26,25 +38,37 @@ public class JlistUserOnline<E extends Object> extends JList<E>{
         setModel(model);
         setOpaque(false);
         this.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-//        addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mousePressed(MouseEvent e){
-//                if(SwingUtilities.isLeftMouseButton(e)){
-//                    int index = locationToIndex(e.getPoint());
-//                    Object obj = model.getElementAt(index);
-//                    if(obj instanceof MessItemModel){
-//                        CreateGroupModel createGroupLeftModel = (CreateGroupModel) obj;
-//                        CreateGroupModel item = (CreateGroupModel) model.getElementAt(index);
-//                        item.setSelected(!item.isSelected());
-//                        selectedIndex = index;
-//                    }else{
-//                        selectedIndex = index;
-//                    }
-//
-//                    repaint();
-//                }
-//            }
-//        });
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent event){
+                if(SwingUtilities.isLeftMouseButton(event)){
+                    int index = locationToIndex(event.getPoint());
+                    Object obj = model.getElementAt(index);
+                    if(obj instanceof MessItemResponse){
+                        MessItemResponse messItemModel = (MessItemResponse) obj;
+                            MessItemResponse item = (MessItemResponse) model.getElementAt(index);
+                            Constants.currentPosition = item;
+                            //KHI CLICK VÀO CÂN GOI SU KIÊN REQUEST_GET_ALL_MESSAGE_BY_USER_ID
+                            try {
+                                DataRequest request = new DataRequest();
+                                request.setName("GET_ALL_MESSAGE_BY_ROOM_ID_REQUEST");
+                                GetAllMessageRequest data = new GetAllMessageRequest(item.getRoomId(), item.getAccountId(), item.getType());
+                                request.setRequest(data);
+                                request.setStatus(Status.SUCCESS);
+
+                                Common.write(request);
+                            } catch (IOException ex) {
+                                Logger.getLogger(TextInput.class.getName()).log(Level.SEVERE, null, ex);
+                            }       
+                            selectedIndex = index;
+                    }else{
+                        selectedIndex = index;
+                    }
+
+                    repaint();
+                }
+            }
+            });
     }
 
     @Override

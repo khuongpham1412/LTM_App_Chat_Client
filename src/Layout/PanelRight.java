@@ -38,14 +38,14 @@ public class PanelRight extends javax.swing.JPanel {
         jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(5, 0));
         
         jlistUserOnline2.setOpaque(false);
-        jlistUserOnline2.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        jlistUserOnline2.setVisibleRowCount(10);
+        //jlistUserOnline2.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+//        jlistUserOnline2.setVisibleRowCount(10);
         jScrollPane3.setOpaque(false);
         jScrollPane3.getViewport().setOpaque(false);
-        jScrollPane3.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        jScrollPane3.getHorizontalScrollBar().setBackground(new Color(98, 132, 255));
-        jScrollPane3.getHorizontalScrollBar().setPreferredSize(new Dimension(5, 0));
-        jScrollPane3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jScrollPane3.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane3.getVerticalScrollBar().setBackground(new Color(98, 132, 255));
+        jScrollPane3.getVerticalScrollBar().setPreferredSize(new Dimension(5, 0));
+//        jScrollPane3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 //        init();
     }
@@ -56,8 +56,12 @@ public class PanelRight extends javax.swing.JPanel {
         for(Message item : this.messages){
             listMess1.addItem(item);
         }
-        for(MessItemResponse item : Constants.messItems){
-            jlistUserOnline2.addItem(item);
+        jlistUserOnline2.resetList();
+        for(MessItemResponse item : Constants.messItems){ 
+            if(item.getType().equals("PRIVATE")){
+                System.out.println("LOGGGG: "+item.getUsername());
+                jlistUserOnline2.addItem(item);   
+            }
         }
         
         getLastMessage();

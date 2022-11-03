@@ -13,6 +13,7 @@ import Enum.StatusMessage;
 import Enum.TypeMessage;
 import Models.Message;
 import Models.RequestModel.DataRequest;
+import Models.RequestModel.GetAllMessageRequest;
 import Models.ResponseModel.MessItemResponse;
 import Utils.Constants;
 import java.awt.Component;
@@ -64,7 +65,8 @@ public class JlistMessageItem<E extends Object> extends JList<E>{
                             try {
                                 DataRequest request = new DataRequest();
                                 request.setName("GET_ALL_MESSAGE_BY_ROOM_ID_REQUEST");
-                                request.setRequest(item.getRoomId());
+                                GetAllMessageRequest data = new GetAllMessageRequest(item.getRoomId(), item.getAccountId(), item.getType());
+                                request.setRequest(data);
                                 request.setStatus(Status.SUCCESS);
 
                                 Common.write(request);

@@ -91,6 +91,7 @@ public class ClientThread implements Runnable{
                     }
                     case "GET_ALL_MESSAGE_BY_ROOM_ID_RESPONSE" -> {
                         ArrayList<Message> messages = (ArrayList<Message>) response.getData();
+                        System.out.println("RA NE: "+ messages.size());
                         if(messages != null){
                             app.setListMessage(messages);
                         }

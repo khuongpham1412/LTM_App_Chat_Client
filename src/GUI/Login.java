@@ -26,6 +26,7 @@ public class Login extends javax.swing.JFrame {
     public static Socket socket;
     public static ObjectOutputStream oos;
     public static ObjectInputStream ois;
+
     /**
      * Creates new form Login
      */
@@ -33,25 +34,25 @@ public class Login extends javax.swing.JFrame {
         initComponents();
         connnect();
     }
-    
+
     private void connnect() {
         //get the localhost IP address, if server is running on some other IP, you need to use that
         try {
             host = InetAddress.getLocalHost();
-                //establish socket connection to server
-                socket = new Socket(host.getHostName(), 9876);
-                //write to socket using ObjectOutputStream
-                oos = new ObjectOutputStream(socket.getOutputStream());
-                //read to socket using ObjectInputStream
-                ois = new ObjectInputStream(socket.getInputStream());
-                ClientThread clientThread = new ClientThread();
-                Thread t = new Thread(clientThread);
-                t.start();
-                
-                Constants.oos = oos;
-                Constants.ois = ois;
-                Constants.socket = socket;
-            
+            //establish socket connection to server
+            socket = new Socket(host.getHostName(), 9876);
+            //write to socket using ObjectOutputStream
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            //read to socket using ObjectInputStream
+            ois = new ObjectInputStream(socket.getInputStream());
+            ClientThread clientThread = new ClientThread();
+            Thread t = new Thread(clientThread);
+            t.start();
+
+            Constants.oos = oos;
+            Constants.ois = ois;
+            Constants.socket = socket;
+
         } catch (IOException ex) {
             try {
                 socket.close();
@@ -127,14 +128,14 @@ public class Login extends javax.swing.JFrame {
             account.setUsername(username);
             account.setPassword(password);
             request.setRequest(account);
-            
+
 //            ClientThread client = new ClientThread();
 //            client.setLoginForm(this);
             this.setVisible(false);
-            
+
             Constants.oos.writeObject(request);
             Constants.oos.flush();
-            
+
         } catch (IOException ex) {
             Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
         }
