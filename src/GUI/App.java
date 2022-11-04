@@ -6,8 +6,8 @@ package GUI;
 
 import Common.EventJlistSelected;
 import Layout.PanelRight;
-import Models.Account;
-import Models.Message;
+import Models.ResponseModel.GetAllMessageResponse;
+import Models.ResponseModel.MessItemResponse;
 import Utils.Constants;
 import java.awt.Color;
 import java.io.IOException;
@@ -53,16 +53,20 @@ public class App extends javax.swing.JFrame {
         panelLeft2.resetPanelLeft();
     }
     
-    public void setListMessage(ArrayList<Message> messages){
+    public void setListMessage(ArrayList<GetAllMessageResponse> messages){
         panelRight.setListMessage(messages);
     }
     
-    public void sendNewMessage(Message mess){
+    public void sendNewMessage(GetAllMessageResponse mess){
         panelRight.sendNewMessage(mess);
     }
     
-    public void updateStatusMessage(Message message){
+    public void updateStatusMessage(GetAllMessageResponse message){
         panelRight.updateStatusMessage(message);
+    }
+    
+    public void updatePositionItemNewMessage(MessItemResponse mess, String test){
+        panelLeft2.updatePositionItemNewMessage(mess, test);
     }
     
     private void connnect() {
@@ -116,18 +120,10 @@ public class App extends javax.swing.JFrame {
 
         panelBorder1 = new Components.PanelBorder();
         panelLeft2 = new Layout.PanelLeft();
-        jButton1 = new javax.swing.JButton();
         panelContent = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
-
-        jButton1.setText("Group");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         panelContent.setOpaque(false);
         panelContent.setLayout(new java.awt.BorderLayout());
@@ -140,17 +136,11 @@ public class App extends javax.swing.JFrame {
                 .addComponent(panelLeft2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(panelContent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1214, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(29, 29, 29))
+                .addContainerGap(1161, Short.MAX_VALUE))
         );
         panelBorder1Layout.setVerticalGroup(
             panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelLeft2, javax.swing.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE)
-            .addGroup(panelBorder1Layout.createSequentialGroup()
-                .addGap(60, 60, 60)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(panelContent, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
@@ -159,8 +149,8 @@ public class App extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(panelBorder1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(panelBorder1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -170,12 +160,6 @@ public class App extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        CreateGroup group = new CreateGroup();
-        group.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -244,7 +228,6 @@ public class App extends javax.swing.JFrame {
         panelContent.revalidate();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private Components.PanelBorder panelBorder1;
     private javax.swing.JPanel panelContent;
     private Layout.PanelLeft panelLeft2;

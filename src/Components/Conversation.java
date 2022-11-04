@@ -4,7 +4,7 @@
  */
 package Components;
 
-import Models.Message;
+import Models.ResponseModel.GetAllMessageResponse;
 import Utils.Constants;
 
 /**
@@ -15,23 +15,34 @@ public class Conversation extends javax.swing.JPanel {
 
     /**
      * Creates new form Conversation
+     * @param message
      */
-    public Conversation(Message message) {
+    public Conversation(GetAllMessageResponse message) {
         initComponents();
         setOpaque(false);
-        if(message.getUser_send().equals(Constants.infomation.getId())){
-            messageRight2.setText(message.getMessage());
-            messageLeft1.removeAll();
-            messageLeft1.setVisible(false);
-            lbStatus.setText(message.getStatus());
+        if(message.getMessage().getUser_send().equals(Constants.infomation.getId())){
+            messageRight2.setText(message.getMessage().getMessage());
+            messageLeft2.removeAll();
+            messageLeft2.setVisible(false);
+            lbStatus.setText(message.getMessage().getStatus());
         }else{
-            messageLeft1.setText(message.getMessage());
+            messageLeft2.setTextMess(message.getMessage().getMessage());
+            messageLeft2.setTextName(message.getUsername());
             messageRight2.setVisible(false);
             messageRight2.removeAll();
             lbStatus.setVisible(false);
             lbStatus.removeAll();
         }
         
+    }
+    
+    public void hideNotice(){
+        lbNotice.setVisible(false);
+        lbNotice.removeAll();
+    }
+    
+    public void openNotice(){
+        lbNotice.setVisible(true);
     }
 
     /**
@@ -44,11 +55,17 @@ public class Conversation extends javax.swing.JPanel {
     private void initComponents() {
 
         messageRight2 = new Components.MessageRight();
-        messageLeft1 = new Components.MessageLeft();
         lbStatus = new javax.swing.JLabel();
+        messageLeft2 = new Components.MessageLeft();
+        lbNotice = new javax.swing.JLabel();
 
         lbStatus.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lbStatus.setText("status");
+
+        lbNotice.setBackground(new java.awt.Color(255, 255, 255));
+        lbNotice.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lbNotice.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbNotice.setText("Send a message to start a conversation");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -56,36 +73,40 @@ public class Conversation extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(messageLeft2, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(messageLeft1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(377, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(messageRight2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbStatus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(messageRight2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(132, 132, 132)
+                .addComponent(lbNotice, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(33, Short.MAX_VALUE)
-                .addComponent(messageLeft1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
-                .addComponent(messageRight2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lbNotice, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbStatus)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(messageRight2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbStatus)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(messageLeft2, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21))))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel lbNotice;
     private javax.swing.JLabel lbStatus;
-    private Components.MessageLeft messageLeft1;
+    private Components.MessageLeft messageLeft2;
     private Components.MessageRight messageRight2;
     // End of variables declaration//GEN-END:variables
 }

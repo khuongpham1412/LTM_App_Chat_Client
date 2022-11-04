@@ -52,7 +52,7 @@ public class JlistUserOnline<E extends Object> extends JList<E>{
                             try {
                                 DataRequest request = new DataRequest();
                                 request.setName("GET_ALL_MESSAGE_BY_ROOM_ID_REQUEST");
-                                GetAllMessageRequest data = new GetAllMessageRequest(item.getRoomId(), item.getAccountId(), item.getType());
+                                GetAllMessageRequest data = new GetAllMessageRequest(item.getRoomId(), Constants.infomation.getId(), item.getAccountId(), item.getType());
                                 request.setRequest(data);
                                 request.setStatus(Status.SUCCESS);
 

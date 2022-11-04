@@ -5,6 +5,7 @@
 package Layout;
 
 import Models.Message;
+import Models.ResponseModel.GetAllMessageResponse;
 import Models.ResponseModel.MessItemResponse;
 import Utils.Constants;
 import java.awt.Color;
@@ -23,7 +24,7 @@ import javax.swing.ScrollPaneConstants;
  */
 public class PanelRight extends javax.swing.JPanel {
 
-    private ArrayList<Message> messages = new ArrayList<>();
+    private ArrayList<GetAllMessageResponse> messages = new ArrayList<>();
     /**
      * Creates new form PanelRight
      */
@@ -37,54 +38,38 @@ public class PanelRight extends javax.swing.JPanel {
         jScrollPane1.getVerticalScrollBar().setBackground(new Color(98, 132, 255));
         jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(5, 0));
         
-        jlistUserOnline2.setOpaque(false);
+//        jlistUserOnline2.setOpaque(false);
         //jlistUserOnline2.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 //        jlistUserOnline2.setVisibleRowCount(10);
-        jScrollPane3.setOpaque(false);
-        jScrollPane3.getViewport().setOpaque(false);
-        jScrollPane3.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane3.getVerticalScrollBar().setBackground(new Color(98, 132, 255));
-        jScrollPane3.getVerticalScrollBar().setPreferredSize(new Dimension(5, 0));
-//        jScrollPane3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 
-//        init();
     }
     
-    public void setListMessage(ArrayList<Message> messages){
+    public void setListMessage(ArrayList<GetAllMessageResponse> messages){
         this.messages = messages;
         listMess1.reset();
-        for(Message item : this.messages){
-            listMess1.addItem(item);
+        if(!this.messages.isEmpty() && this.messages.get(0).getMessage().getType().equals("PRIVATE")){
+            btnPermission.setText("Block");
+        }else{
+            btnPermission.setText("Leave Group");
         }
-        jlistUserOnline2.resetList();
-        for(MessItemResponse item : Constants.messItems){ 
-            if(item.getType().equals("PRIVATE")){
-                System.out.println("LOGGGG: "+item.getUsername());
-                jlistUserOnline2.addItem(item);   
-            }
+//        if(!messages.isEmpty()){
+//            listMess1.hideNotice();
+//        }else{
+//            listMess1.openNotice();
+//        }
+        
+        for(GetAllMessageResponse item : this.messages){
+            listMess1.addItem(item);
         }
         
         getLastMessage();
     }
     
-    public void updateStatusMessage(Message message){
+    public void updateStatusMessage(GetAllMessageResponse message){
         listMess1.update(message, this.messages.size()-1);
     }
     
-//    private void init(){
-//        for(Message item : messages){
-//            listMess1.addItem(item);
-//        }
-//        
-//        getLastMessage();
-//        
-//        JScrollBar vertical = jScrollPane1.getVerticalScrollBar();
-//        vertical.setValue(9);
-//        Point p = jScrollPane1.getViewport().getLocation();
-//        jScrollPane1.getViewport().setViewPosition(p);
-//    }
-    
-    public void sendNewMessage(Message mess){
+    public void sendNewMessage(GetAllMessageResponse mess){
         this.messages.add(mess);
         listMess1.addItem(mess);
         getLastMessage();
@@ -105,49 +90,94 @@ public class PanelRight extends javax.swing.JPanel {
     private void initComponents() {
 
         textInput1 = new Components.TextInput();
+        jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         listMess1 = new Models.JListModel.JlistConversation<>();
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jlistUserOnline2 = new Models.JListModel.JlistUserOnline<>();
+        jPanel3 = new javax.swing.JPanel();
+        imageAvatar1 = new Helper.ImageAvatar();
+        jLabel1 = new javax.swing.JLabel();
+        btnPermission = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setOpaque(false);
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setOpaque(false);
+
+        jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollPane1.setOpaque(false);
+
         jScrollPane1.setViewportView(listMess1);
 
-        jPanel1.setOpaque(false);
-
-        jScrollPane3.setOpaque(false);
-
-        jScrollPane3.setViewportView(jlistUserOnline2);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3)
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 601, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setOpaque(false);
+
+        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel1.setText("Username");
+
+        btnPermission.setText("Permission");
+
+        jLabel2.setText("Status");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(imageAvatar1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnPermission)
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(btnPermission, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(imageAvatar1, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel2)))
+                .addGap(0, 10, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(textInput1, javax.swing.GroupLayout.DEFAULT_SIZE, 1236, Short.MAX_VALUE)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(textInput1, javax.swing.GroupLayout.DEFAULT_SIZE, 1136, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 557, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(textInput1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -166,10 +196,13 @@ public class PanelRight extends javax.swing.JPanel {
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton btnPermission;
+    private Helper.ImageAvatar imageAvatar1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane3;
-    private Models.JListModel.JlistUserOnline<String> jlistUserOnline2;
     private Models.JListModel.JlistConversation<String> listMess1;
     private Components.TextInput textInput1;
     // End of variables declaration//GEN-END:variables

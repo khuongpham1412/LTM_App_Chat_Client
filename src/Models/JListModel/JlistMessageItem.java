@@ -9,9 +9,6 @@ import Common.EventJlistSelected;
 import Components.MessageItem;
 import Components.TextInput;
 import Enum.Status;
-import Enum.StatusMessage;
-import Enum.TypeMessage;
-import Models.Message;
 import Models.RequestModel.DataRequest;
 import Models.RequestModel.GetAllMessageRequest;
 import Models.ResponseModel.MessItemResponse;
@@ -20,8 +17,6 @@ import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.Date;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListCellRenderer;
@@ -58,14 +53,14 @@ public class JlistMessageItem<E extends Object> extends JList<E>{
                     if(obj instanceof MessItemResponse){
                         MessItemResponse messItemModel = (MessItemResponse) obj;
                         if(event != null){
-                            System.out.println("index: "+index);
                             MessItemResponse item = (MessItemResponse) model.getElementAt(index);
                             Constants.currentPosition = item;
+                            Constants.currentPositionIndex = index;
                             //KHI CLICK VÀO CÂN GOI SU KIÊN REQUEST_GET_ALL_MESSAGE_BY_USER_ID
                             try {
                                 DataRequest request = new DataRequest();
                                 request.setName("GET_ALL_MESSAGE_BY_ROOM_ID_REQUEST");
-                                GetAllMessageRequest data = new GetAllMessageRequest(item.getRoomId(), item.getAccountId(), item.getType());
+                                GetAllMessageRequest data = new GetAllMessageRequest(item.getRoomId(), Constants.infomation.getId(), item.getAccountId(), item.getType());
                                 request.setRequest(data);
                                 request.setStatus(Status.SUCCESS);
 
@@ -98,12 +93,23 @@ public class JlistMessageItem<E extends Object> extends JList<E>{
                 }else{
                     data = new MessItemResponse();
                 }
-                if(isSelected){
-                    //System.out.println("INDEX: "+ index);
-                }
+                
 
                 MessageItem item = new MessageItem(data);
-                item.setSelected(selectedIndex == index);
+                if(isSelected){
+                    item.setSelected(selectedIndex == index);
+                }
+                
+                //User id received
+//                if(Constants.currentPosition != null && !Constants.currentPosition.getRoomId().equals(data.getRoomId()) && Constants.infomation.getId().equals(data.getAccountId()) && index == 0 && !isSelected){
+//                    item.setSelected(true);
+//                }
+                //User id send
+                if(Constants.currentPosition != null && Constants.currentPosition.getRoomId().equals(data.getRoomId()) && !isSelected){
+                    Constants.currentPosition = data;
+                    Constants.currentPositionIndex = 0;
+                    item.setSelected(true);
+                }
                 return item;
             }
             

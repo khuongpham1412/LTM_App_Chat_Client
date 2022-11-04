@@ -12,6 +12,7 @@ import Models.RequestModel.DataRequest;
 import Models.ResponseModel.DataResponse;
 import Models.Message;
 import Models.RequestModel.UpdateStatusMessageRequest;
+import Models.ResponseModel.GetAllMessageResponse;
 import Models.ResponseModel.MessItemResponse;
 import Utils.Constants;
 import java.io.IOException;
@@ -87,41 +88,73 @@ public class ClientThread implements Runnable{
                         }
                     }
                     case "CREATE_GROUP_CHAT_RESPONSE" -> {
-                        System.out.println("");
+                        System.out.println("CREATE GROUP SUCCESS!");
                     }
                     case "GET_ALL_MESSAGE_BY_ROOM_ID_RESPONSE" -> {
-                        ArrayList<Message> messages = (ArrayList<Message>) response.getData();
-                        System.out.println("RA NE: "+ messages.size());
+                        ArrayList<GetAllMessageResponse> messages = (ArrayList<GetAllMessageResponse>) response.getData();
                         if(messages != null){
                             app.setListMessage(messages);
                         }
                     }
                     case "SEND_MESSAGE_PRIVATE_RESPONSE" ->  {
                         if(response.getStatus().equals(Status.SUCCESS)){
-                            Message mess = (Message) response.getData();
+                            GetAllMessageResponse mess = (GetAllMessageResponse) response.getData();
+                            MessItemResponse messs = new MessItemResponse();
+                            messs.setAccountId(mess.getMessage().getUser_send());
+                            messs.setNewMessage(mess.getMessage().getMessage());
+                            messs.setRoomId(mess.getMessage().getIdRoom());
+                            messs.setStatus(mess.getMessage().getStatus());
+                            messs.setType(mess.getMessage().getType());
+                            
+                            //Neu user dang focus vao ai do
                             if(Constants.currentPosition != null){
-                                if(mess.getUser_send().equals(Constants.currentPosition.getAccountId())){
+                                //Neu ben gui gui id phong = id phong dang focus
+                                if(mess.getMessage().getIdRoom().equals(Constants.currentPosition.getRoomId())){
                                     app.sendNewMessage(mess);
-                                }                              
+                                }
                             }
-                            if(Constants.infomation.getId().equals(mess.getUser_send())){
-                                app.sendNewMessage(mess);
-                            }
-//                            DataRequest request = new DataRequest();
-//                            request.setName("RESET_PANEL_LEFT_REQUEST");
-//                            request.setRequest(Constants.infomation.getId());
-//                            request.setStatus(Status.SUCCESS);
-//
-//                            write(request);
+                            
+                            //Neu user dang focus vao 1 ai do
+//                            if(Constants.currentPosition != null){
+//                                //Neu id nguoi gui = id ben nguoi nhan dang focus (nguoi nhan dang o trong cuoc hoi thoai nay)(cap nhat ben phia nguoi nhan)
+//                                if(mess.getMessage().getUser_send().equals(Constants.currentPosition.getAccountId())){
+//                                    app.sendNewMessage(mess);
+//                                    for(MessItemResponse item : Constants.messItems){
+//                                        if(item.getRoomId().equals(mess.getMessage().getIdRoom())){
+//                                            messs.setUsername(item.getUsername());
+//                                            break;
+//                                        }
+//                                    }
+//                                    app.updatePositionItemNewMessage(messs, "TEST3");
+//                                }else{
+//                                    System.out.println("User khong focus");
+//                                }
+//                                else if(!mess.getMessage().getUser_send().equals(Constants.currentPosition.getAccountId())){
+//                                    for(MessItemResponse item : Constants.messItems){
+//                                        if(item.getRoomId().equals(mess.getMessage().getIdRoom())){
+//                                            messs.setUsername(item.getUsername());
+//                                            break;
+//                                        }
+//                                    }
+//                                    app.updatePositionItemNewMessage(messs, "TEST1");
+//                                }                           
+//                            }
+//                            //neu id nguoi gui = id nguoi gui (cap nhat ben phia nguoi gui)
+//                            if(Constants.infomation.getId().equals(mess.getMessage().getUser_send())){
+//                                app.sendNewMessage(mess);
+//                                messs.setUsername(Constants.currentPosition.getUsername());
+//                                app.updatePositionItemNewMessage(messs, "TEST2");
+//                            }
+            
                             try {
-                                Thread.sleep(2000);
+                                Thread.sleep(1500);
                             } catch (InterruptedException ex) {
                                 Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
                             }
 
                             DataRequest request = new DataRequest();
                             request.setName("UPDATE_STATUS_MESSAGE_REQUEST");
-                            mess.setStatus(StatusMessage.RECEIVED.toString());
+                            mess.getMessage().setStatus(StatusMessage.RECEIVED.toString());
                             request.setRequest(mess);
                             request.setStatus(Status.SUCCESS);
 
@@ -130,57 +163,83 @@ public class ClientThread implements Runnable{
                     }
                     case "SEND_MESSAGE_GROUP_RESPONSE" ->  {
                         if(response.getStatus().equals(Status.SUCCESS)){
-                            Message mess = (Message) response.getData();
+                            GetAllMessageResponse mess = (GetAllMessageResponse) response.getData();
                             if(Constants.currentPosition != null){
-                                if(mess.getIdRoom().equals(Constants.currentPosition.getRoomId()) && !Constants.infomation.getId().equals(mess.getUser_send())){
+                                if(mess.getMessage().getIdRoom().equals(Constants.currentPosition.getRoomId()) && !Constants.infomation.getId().equals(mess.getMessage().getUser_send())){
                                     app.sendNewMessage(mess);
+                                    MessItemResponse messs = new MessItemResponse();
+                                    messs.setAccountId(mess.getMessage().getUser_send());
+                                    messs.setNewMessage(mess.getMessage().getMessage());
+                                    messs.setRoomId(mess.getMessage().getIdRoom());
+                                    messs.setStatus(mess.getMessage().getStatus());
+                                    messs.setType(mess.getMessage().getType());
+                                    for(MessItemResponse item : Constants.messItems){
+                                        if(item.getRoomId().equals(mess.getMessage().getIdRoom())){
+                                            System.out.println("VAO ROIF NHA: "+item.getUsername());
+                                            messs.setUsername(item.getUsername());
+                                            break;
+                                        }
+                                    }
+                                    app.updatePositionItemNewMessage(messs, "TEST3");
                                 }                              
+                            else{
+                                    MessItemResponse messs = new MessItemResponse();
+                                    messs.setAccountId(mess.getMessage().getUser_send());
+                                    messs.setNewMessage(mess.getMessage().getMessage());
+                                    messs.setRoomId(mess.getMessage().getIdRoom());
+                                    messs.setStatus(mess.getMessage().getStatus());
+                                    messs.setType(mess.getMessage().getType());
+                                    for(MessItemResponse item : Constants.messItems){
+                                        if(item.getRoomId().equals(mess.getMessage().getIdRoom())){
+                                            messs.setUsername(item.getUsername());
+                                            break;
+                                        }
+                                    }
+                                    app.updatePositionItemNewMessage(messs, "TEST1");
+                                }                           
                             }
-                            if(Constants.infomation.getId().equals(mess.getUser_send())){
+                            if(Constants.infomation.getId().equals(mess.getMessage().getUser_send())){
                                 app.sendNewMessage(mess);
+                                MessItemResponse messs = new MessItemResponse();
+                                    messs.setAccountId(mess.getMessage().getUser_send());
+                                    messs.setNewMessage(mess.getMessage().getMessage());
+                                    messs.setRoomId(mess.getMessage().getIdRoom());
+                                    messs.setStatus(mess.getMessage().getStatus());
+                                    messs.setType(mess.getMessage().getType());
+                                    messs.setUsername(Constants.currentPosition.getUsername());
+                                    app.updatePositionItemNewMessage(messs, "TEST2");
                             }
                         }
                     }
                     case "UPDATE_STATUS_MESSAGE_RESPONSE" -> {
-                        Message mess = (Message) response.getData();
+                        GetAllMessageResponse mess = (GetAllMessageResponse) response.getData();
                         
-                        if(mess.getStatus().equals(StatusMessage.RECEIVED.toString())){
+                        if(mess.getMessage().getStatus().equals(StatusMessage.RECEIVED.toString())){
                             if(Constants.currentPosition != null){
-                                if(mess.getUser_send().equals(Constants.currentPosition.getAccountId())){
-                                    System.out.println("1");
+                                //Neu ben gui gui id phong = id phong dang focus
+                                //+ User gui dang focus vao room nay nen ben user gui luon chay ham nay
+                                if(mess.getMessage().getIdRoom().equals(Constants.currentPosition.getRoomId())){
                                     app.updateStatusMessage(mess);
-                                   
-                                    try {
-                                        Thread.sleep(2000);
-                                    } catch (InterruptedException ex) {
-                                        Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
-                                    }
-                                    DataRequest request = new DataRequest();
-                                    request.setName("UPDATE_STATUS_MESSAGE_REQUEST");
-                                    mess.setStatus(StatusMessage.SEEN.toString());
-                                    System.out.println("sdfdgf"+mess.getStatus());
-                                    request.setRequest(mess);
-                                    request.setStatus(Status.SUCCESS);
+                                    if(mess.getMessage().getIdRoom().equals(Constants.currentPosition.getRoomId()) && !mess.getMessage().getUser_send().equals(Constants.infomation.getId())){
+                                        try {
+                                        Thread.sleep(1500);
+                                        } catch (InterruptedException ex) {
+                                            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                        DataRequest request = new DataRequest();
+                                        request.setName("UPDATE_STATUS_MESSAGE_REQUEST");
+                                        mess.getMessage().setStatus(StatusMessage.SEEN.toString());
+                                        request.setRequest(mess);
+                                        request.setStatus(Status.SUCCESS);
 
-                                    write(request);
-                                }                          
-                            }
-                        if(Constants.infomation.getId().equals(mess.getUser_send())){
-                                System.out.println("2");
-                                System.out.println("sttus"+mess.getStatus());
-                                app.updateStatusMessage(mess);
-                            }    
-                            
+                                        write(request);
+                                    }
+                                }
+                            }  
                         }
-                        if(mess.getStatus().equals(StatusMessage.SEEN.toString())){
-                            System.out.println("3: "+mess.getStatus());
+                        if(mess.getMessage().getStatus().equals(StatusMessage.SEEN.toString())){
                             app.updateStatusMessage(mess);
                         }
-//                        else if(Constants.currentPosition== null){
-//                            System.out.println("xu ly panel letf");
-//                        }
-                            
-
                     }
                     case "RESET_PANEL_LEFT_RESPONSE" -> {
                         if(response.getStatus().equals(Status.SUCCESS)){

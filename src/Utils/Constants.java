@@ -28,5 +28,6 @@ public final class Constants {
     public static ArrayList<Account> accounts;
     public static Account infomation;
     public static MessItemResponse currentPosition;
+    public static int currentPositionIndex;
     public static ArrayList<MessItemResponse> messItems;
 }

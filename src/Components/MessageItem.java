@@ -28,14 +28,12 @@ public class MessageItem extends javax.swing.JPanel {
         setOpaque(false);
 //        setBorder(BorderFactory.createLineBorder(new Color(58,107,123)));
         if(!messItemModel.getStatus().equals(StatusMessage.SEEN)){
-            System.out.println("NOT SEEN");
             Font newLabelFont=new Font(lbName.getFont().getName(),Font.BOLD,lbName.getFont().getSize());
             lbName.setText(messItemModel.getUsername());
             lbName.setFont(newLabelFont);
             lbMess.setFont(newLabelFont);
             lbMess.setText(messItemModel.getNewMessage());
         }else{
-            System.out.println("SEEN");
             lbName.setText(messItemModel.getUsername());
             lbMess.setText(messItemModel.getNewMessage());
         }

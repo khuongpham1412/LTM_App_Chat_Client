@@ -5,13 +5,8 @@
 package Models.JListModel;
 
 import Components.Conversation;
-import Enum.StatusMessage;
-import Enum.TypeMessage;
-import Models.Message;
+import Models.ResponseModel.GetAllMessageResponse;
 import java.awt.Component;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.UUID;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -26,6 +21,7 @@ public class JlistConversation<E extends Object> extends JList<E>{
     
     private final DefaultListModel model;
     private int selectedIndex = -1;
+    Conversation item;
     
     public JlistConversation(){
         model = new DefaultListModel();
@@ -63,16 +59,17 @@ public class JlistConversation<E extends Object> extends JList<E>{
         return new DefaultListCellRenderer(){
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                Message data;
-                if(value instanceof Message){
-                    data = (Message)value;
+                GetAllMessageResponse data;
+                if(value instanceof GetAllMessageResponse){
+                    data = (GetAllMessageResponse)value;
                 }else{
-                    data = new Message();
+                    data = new GetAllMessageResponse();
                 }
                 if(isSelected){
                     System.out.println(index);
                 }
-                Conversation item = new Conversation(data);
+                item = new Conversation(data);
+                item.hideNotice();
 //                item.setSelected(selectedIndex == index);
                 return item;
             }
@@ -80,7 +77,15 @@ public class JlistConversation<E extends Object> extends JList<E>{
         };
     }
     
-    public void addItem(Message data){
+    public void hideNotice(){
+        item.hideNotice();
+    }
+    
+    public void openNotice(){
+        item.openNotice();
+    }
+    
+    public void addItem(GetAllMessageResponse data){
         model.addElement(data);
     }
     
@@ -88,8 +93,7 @@ public class JlistConversation<E extends Object> extends JList<E>{
         model.removeAllElements();
     }
     
-    public void update(Message message, int index){
-        System.out.println("ind: "+index);
+    public void update(GetAllMessageResponse message, int index){
         model.setElementAt(message, index);
     }
     

@@ -5,8 +5,8 @@
 package Layout;
 
 import Common.EventJlistSelected;
+import GUI.CreateGroup;
 import Models.Account;
-import Models.MessItemModel;
 import Models.ResponseModel.MessItemResponse;
 import Utils.Constants;
 import java.awt.Color;
@@ -56,14 +56,34 @@ public class PanelLeft extends javax.swing.JPanel {
         listMenu1.reset();
         MessItemResponse messItem = null;
         for(MessItemResponse item : Constants.messItems){
-                listMenu1.addItem(new MessItemResponse(item.getAccountId() ,item.getRoomId(), item.getUsername(), item.getNewMessage(), item.getStatus(), item.getType()));
-            
+            listMenu1.addItem(new MessItemResponse(item.getAccountId() ,item.getRoomId(), item.getUsername(), item.getNewMessage(), item.getStatus(), item.getType()));            
         }
         
         listMenu1.repaint();
-//        removeAll();
-//        validate();
-//        repaint();
+    }
+    
+    public void updatePositionItemNewMessage(MessItemResponse mess, String test){
+        listMenu1.reset();
+        
+        if(test.equals("TEST1")){
+            for(MessItemResponse item : Constants.messItems){
+                if(item.getRoomId().equals(mess.getRoomId())){
+                    Constants.messItems.remove(item);
+                    break;
+                }
+            }
+            
+            Constants.messItems.add(0, mess);
+        }else{
+            Constants.messItems.remove(Constants.currentPositionIndex);
+            Constants.messItems.add(0, mess);
+        }
+        
+        for(MessItemResponse item : Constants.messItems){
+            listMenu1.addItem(new MessItemResponse(item.getAccountId() ,item.getRoomId(), item.getUsername(), item.getNewMessage(), item.getStatus(), item.getType()));        
+        }
+        
+        listMenu1.repaint();
     }
 
     /**
@@ -77,6 +97,7 @@ public class PanelLeft extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         listMenu1 = new Models.JListModel.JlistMessageItem<>();
 
@@ -90,6 +111,13 @@ public class PanelLeft extends javax.swing.JPanel {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("ZALO fake");
 
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -97,13 +125,17 @@ public class PanelLeft extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(96, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(90, 90, 90))
+                .addGap(18, 18, 18)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
 
@@ -127,6 +159,12 @@ public class PanelLeft extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        CreateGroup group = new CreateGroup();
+        group.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     @Override
     protected void paintChildren(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
@@ -144,6 +182,7 @@ public class PanelLeft extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
