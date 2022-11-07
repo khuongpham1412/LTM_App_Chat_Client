@@ -43,6 +43,9 @@ public class MessageLeft extends javax.swing.JPanel {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setOpaque(false);
 
+        imageAvatar1.setGradientColor1(new java.awt.Color(102, 255, 102));
+        imageAvatar1.setImage(new javax.swing.ImageIcon(getClass().getResource("/Icon/8.png"))); // NOI18N
+
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setOpaque(false);
 

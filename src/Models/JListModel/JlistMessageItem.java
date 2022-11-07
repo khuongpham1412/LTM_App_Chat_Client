@@ -105,11 +105,11 @@ public class JlistMessageItem<E extends Object> extends JList<E>{
 //                    item.setSelected(true);
 //                }
                 //User id send
-                if(Constants.currentPosition != null && Constants.currentPosition.getRoomId().equals(data.getRoomId()) && !isSelected){
-                    Constants.currentPosition = data;
-                    Constants.currentPositionIndex = 0;
-                    item.setSelected(true);
-                }
+//                if(Constants.currentPosition != null && Constants.currentPosition.getRoomId().equals(data.getRoomId()) && !isSelected){
+//                    Constants.currentPosition = data;
+//                    Constants.currentPositionIndex = 0;
+//                    item.setSelected(true);
+//                }
                 return item;
             }
             

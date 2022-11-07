@@ -15,6 +15,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -52,7 +53,17 @@ public class PanelLeft extends javax.swing.JPanel {
         init();
     }
     
+    public void updateAccountOnline(ArrayList<String> accOnline){
+        listMenu1.reset();
+        for(MessItemResponse item : Constants.messItems){
+            listMenu1.addItem(new MessItemResponse(item.getAccountId() ,item.getRoomId(), item.getUsername(), item.getNewMessage(), item.getStatus(), item.getType()));            
+        }
+        
+        listMenu1.repaint();
+    }
+    
     public void init(){
+        txtSearch.setText("");
         listMenu1.reset();
         MessItemResponse messItem = null;
         for(MessItemResponse item : Constants.messItems){
@@ -74,14 +85,23 @@ public class PanelLeft extends javax.swing.JPanel {
             }
             
             Constants.messItems.add(0, mess);
-        }else{
+        }else if(test.equals("USER_SEND")){
             Constants.messItems.remove(Constants.currentPositionIndex);
             Constants.messItems.add(0, mess);
+            Constants.currentPosition = mess;
+            Constants.currentPositionIndex = 0;
+        }else if(test.equals("USER_RECEIVED_FOCUS")){
+            Constants.messItems.remove(Constants.currentPositionIndex);
+            Constants.messItems.add(0, mess);
+            Constants.currentPosition = mess;
+            System.out.println("DA VAO: "+ Constants.currentPosition.getNewMessage());
+            Constants.currentPositionIndex = 0;
         }
         
         for(MessItemResponse item : Constants.messItems){
             listMenu1.addItem(new MessItemResponse(item.getAccountId() ,item.getRoomId(), item.getUsername(), item.getNewMessage(), item.getStatus(), item.getType()));        
         }
+        
         
         listMenu1.repaint();
     }
@@ -98,6 +118,7 @@ public class PanelLeft extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        txtSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         listMenu1 = new Models.JListModel.JlistMessageItem<>();
 
@@ -118,6 +139,17 @@ public class PanelLeft extends javax.swing.JPanel {
             }
         });
 
+        txtSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtSearchMouseClicked(evt);
+            }
+        });
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSearchKeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -128,6 +160,10 @@ public class PanelLeft extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -136,7 +172,9 @@ public class PanelLeft extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jScrollPane1.setOpaque(false);
@@ -165,6 +203,41 @@ public class PanelLeft extends javax.swing.JPanel {
         group.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void txtSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSearchMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_txtSearchMouseClicked
+
+    private void txtSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            if(txtSearch.getText().trim().equals("")){
+                listMenu1.reset();
+                for(MessItemResponse item : Constants.messItems){
+                    listMenu1.addItem(new MessItemResponse(item.getAccountId() ,item.getRoomId(), item.getUsername(), item.getNewMessage(), item.getStatus(), item.getType()));        
+                }
+            }else{
+                System.out.println("START SEARCH...");
+                listMenu1.reset();
+                boolean check = false;
+                for(Account acc : Constants.accounts){
+                    if(!Constants.infomation.getId().equals(acc.getId()) && acc.getUsername().toUpperCase().contains(txtSearch.getText().trim().toUpperCase())){
+                        for(MessItemResponse item : Constants.messItems){
+                            if(acc.getId().equals(item.getAccountId())){
+                                listMenu1.addItem(new MessItemResponse(item.getAccountId() ,item.getRoomId(), item.getUsername(), "", item.getStatus(), item.getType()));        
+                                check = true;
+                            }
+                        }
+                        if(!check){
+                            listMenu1.addItem(new MessItemResponse(acc.getId() , "", acc.getUsername(), "", "", "PRIVATE"));
+                        }  
+                        check = false;
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_txtSearchKeyPressed
+
     @Override
     protected void paintChildren(Graphics g) {
         Graphics2D g2 = (Graphics2D)g;
@@ -187,5 +260,6 @@ public class PanelLeft extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private Models.JListModel.JlistMessageItem<String> listMenu1;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }

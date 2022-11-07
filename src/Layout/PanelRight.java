@@ -4,7 +4,6 @@
  */
 package Layout;
 
-import Models.Message;
 import Models.ResponseModel.GetAllMessageResponse;
 import Models.ResponseModel.MessItemResponse;
 import Utils.Constants;
@@ -14,9 +13,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-import javax.swing.JList;
 import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 
 /**
  *
@@ -37,11 +34,45 @@ public class PanelRight extends javax.swing.JPanel {
         jScrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.getVerticalScrollBar().setBackground(new Color(98, 132, 255));
         jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(5, 0));
-        
-//        jlistUserOnline2.setOpaque(false);
-        //jlistUserOnline2.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-//        jlistUserOnline2.setVisibleRowCount(10);
-
+        if(Constants.currentPosition != null){
+            lbName.setText(Constants.currentPosition.getUsername());
+        }
+    }
+    
+    public void updateUsername(){
+        if(Constants.currentPosition != null){
+            lbName.setText(Constants.currentPosition.getUsername());
+        }
+        updateStatusOnline();
+    }
+    
+    public void updateAccountOnline(ArrayList<String> accOnline){
+        if(Constants.accOnline != null && Constants.currentPosition != null){
+            for(String acc : Constants.accOnline){
+                if(Constants.currentPosition.getAccountId().equals(acc)){
+                    lbStatus.setText("Online");
+                    imageAvatar1.setGradientColor1(new java.awt.Color(102, 255, 102));
+                    imageAvatar1.setGradientColor2(new java.awt.Color(42, 199, 80));
+                    break;
+                }
+            }
+        }
+    }
+    
+    public void updateStatusOnline(){
+        lbStatus.setText("Ofline");
+        imageAvatar1.setGradientColor1(new java.awt.Color(255, 255, 255, 0));
+        imageAvatar1.setGradientColor2(new java.awt.Color(255, 255, 255, 0));
+        if(Constants.accOnline != null){
+            for(String acc : Constants.accOnline){
+            if(Constants.currentPosition.getAccountId().equals(acc)){
+                lbStatus.setText("Online");
+                imageAvatar1.setGradientColor1(new java.awt.Color(102, 255, 102));
+                imageAvatar1.setGradientColor2(new java.awt.Color(42, 199, 80));
+                break;
+            }
+        }
+        }
     }
     
     public void setListMessage(ArrayList<GetAllMessageResponse> messages){
@@ -52,14 +83,13 @@ public class PanelRight extends javax.swing.JPanel {
         }else{
             btnPermission.setText("Leave Group");
         }
-//        if(!messages.isEmpty()){
-//            listMess1.hideNotice();
-//        }else{
-//            listMess1.openNotice();
-//        }
         
         for(GetAllMessageResponse item : this.messages){
             listMess1.addItem(item);
+        }
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
         }
         
         getLastMessage();
@@ -95,9 +125,9 @@ public class PanelRight extends javax.swing.JPanel {
         listMess1 = new Models.JListModel.JlistConversation<>();
         jPanel3 = new javax.swing.JPanel();
         imageAvatar1 = new Helper.ImageAvatar();
-        jLabel1 = new javax.swing.JLabel();
+        lbName = new javax.swing.JLabel();
         btnPermission = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        lbStatus = new javax.swing.JLabel();
 
         setOpaque(false);
 
@@ -125,13 +155,16 @@ public class PanelRight extends javax.swing.JPanel {
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setOpaque(false);
 
-        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        jLabel1.setText("Username");
+        imageAvatar1.setGradientColor1(new java.awt.Color(102, 255, 102));
+        imageAvatar1.setImage(new javax.swing.ImageIcon(getClass().getResource("/Icon/8.png"))); // NOI18N
+
+        lbName.setBackground(new java.awt.Color(255, 255, 255));
+        lbName.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        lbName.setText("Username");
 
         btnPermission.setText("Permission");
 
-        jLabel2.setText("Status");
+        lbStatus.setText("Status");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -142,8 +175,8 @@ public class PanelRight extends javax.swing.JPanel {
                 .addComponent(imageAvatar1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                    .addComponent(lbName, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbStatus))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnPermission)
                 .addContainerGap())
@@ -158,9 +191,9 @@ public class PanelRight extends javax.swing.JPanel {
                         .addComponent(btnPermission, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(imageAvatar1, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lbName, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel2)))
+                        .addComponent(lbStatus)))
                 .addGap(0, 10, Short.MAX_VALUE))
         );
 
@@ -198,11 +231,11 @@ public class PanelRight extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPermission;
     private Helper.ImageAvatar imageAvatar1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbName;
+    private javax.swing.JLabel lbStatus;
     private Models.JListModel.JlistConversation<String> listMess1;
     private Components.TextInput textInput1;
     // End of variables declaration//GEN-END:variables

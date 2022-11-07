@@ -44,6 +44,7 @@ public class App extends javax.swing.JFrame {
             @Override
             public void selected(int index) {
                 setPanel(panelRight);
+                panelRight.updateUsername();
             }
         });
 //        connnect();
@@ -51,6 +52,14 @@ public class App extends javax.swing.JFrame {
     
     public void resetPanelLeft(){
         panelLeft2.resetPanelLeft();
+    }
+    
+    public void updateAccountOnlineLeft(ArrayList<String> accOnline){
+        panelLeft2.updateAccountOnline(accOnline);
+    }
+    
+    public void updateAccountOnlineRight(ArrayList<String> accOnline){
+        panelRight.updateAccountOnline(accOnline);
     }
     
     public void setListMessage(ArrayList<GetAllMessageResponse> messages){

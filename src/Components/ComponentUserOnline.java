@@ -41,6 +41,7 @@ public class ComponentUserOnline extends javax.swing.JPanel {
         jPanel1.setOpaque(false);
 
         lbAvater.setBackground(new java.awt.Color(255, 255, 255));
+        lbAvater.setGradientColor1(new java.awt.Color(102, 255, 102));
 
         lbName.setBackground(new java.awt.Color(255, 255, 255));
         lbName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

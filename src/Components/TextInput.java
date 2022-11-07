@@ -10,6 +10,7 @@ import Enum.StatusMessage;
 import Enum.TypeMessage;
 import Models.RequestModel.DataRequest;
 import Models.Message;
+import Models.ResponseModel.MessItemResponse;
 import Utils.Constants;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
@@ -74,8 +75,7 @@ public class TextInput extends javax.swing.JPanel {
 
     private void txtMessKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMessKeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-           System.out.println("START SEND MESSAGER...");
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER && !txtMess.getText().trim().equals("")){
            try {
                 DataRequest request = new DataRequest();
                 

@@ -7,6 +7,7 @@ package Components;
 import Enum.StatusMessage;
 import Models.MessItemModel;
 import Models.ResponseModel.MessItemResponse;
+import Utils.Constants;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -27,6 +28,18 @@ public class MessageItem extends javax.swing.JPanel {
         initComponents();
         setOpaque(false);
 //        setBorder(BorderFactory.createLineBorder(new Color(58,107,123)));
+        imageAvatar1.removeAll();
+        imageAvatar1.setGradientColor1(new java.awt.Color(255, 255, 255, 0));
+        imageAvatar1.setGradientColor2(new java.awt.Color(255, 255, 255, 0));
+        if(Constants.accOnline != null){
+            for(String item : Constants.accOnline){
+                if(messItemModel.getAccountId().equals(item)){
+                    imageAvatar1.setGradientColor1(new java.awt.Color(102, 255, 102));
+                    imageAvatar1.setGradientColor2(new java.awt.Color(42, 199, 80));
+                    break;
+                }
+            }
+        }
         if(!messItemModel.getStatus().equals(StatusMessage.SEEN)){
             Font newLabelFont=new Font(lbName.getFont().getName(),Font.BOLD,lbName.getFont().getSize());
             lbName.setText(messItemModel.getUsername());
@@ -73,6 +86,7 @@ public class MessageItem extends javax.swing.JPanel {
 
         setOpaque(false);
 
+        imageAvatar1.setGradientColor1(new java.awt.Color(102, 255, 102));
         imageAvatar1.setImage(new javax.swing.ImageIcon(getClass().getResource("/Icon/8.png"))); // NOI18N
 
         jPanel2.setOpaque(false);
