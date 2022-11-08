@@ -95,6 +95,9 @@ public class ClientThread implements Runnable{
                         app.updateAccountOnlineRight(Constants.accOnline);
                     }
                     case "CREATE_GROUP_CHAT_RESPONSE" -> {
+                        MessItemResponse mess = (MessItemResponse) response.getData();
+                        Constants.messItems.add(mess);
+                        app.resetPanelLeft();
                         System.out.println("CREATE GROUP SUCCESS!");
                     }
                     case "UPDATE_ACCOUNT_ONLINE_RESPONSE" -> {
@@ -179,9 +182,18 @@ public class ClientThread implements Runnable{
                                 }
                             }
                             //Neu user ben nhan chua focus vao ai hoac dang focus vao 1 nguoi khac
-                            if(Constants.currentPosition == null || (Constants.currentPosition != null && !Constants.currentPosition.getRoomId().equals(""))){
-                                Constants.messItems.add(new MessItemResponse(mess.getMessage().getUser_send(), mess.getMessage().getIdRoom(), name, mess.getMessage().getMessage(), mess.getMessage().getStatus(), mess.getRoomType()));
-                                app.resetPanelLeft();
+                            if(Constants.currentPosition == null || (Constants.currentPosition != null && !Constants.currentPosition.getRoomId().equals("") && Constants.infomation.getId().equals(mess.getMessage().getUser_receive()))){
+                                boolean check = true;
+                                for(MessItemResponse i: Constants.messItems){
+                                    if(mess.getMessage().getIdRoom().equals(i.getRoomId())){
+                                        check = false;
+                                        break;
+                                    }
+                                }
+                                if(check){
+                                    Constants.messItems.add(new MessItemResponse(mess.getMessage().getUser_send(), mess.getMessage().getIdRoom(), name, mess.getMessage().getMessage(), mess.getMessage().getStatus(), mess.getRoomType()));
+                                    app.resetPanelLeft();
+                                }
                             }
                             //Neu user ben nhan dang focus vao
                             else if(Constants.currentPosition != null && Constants.currentPosition.getRoomId().equals("") && Constants.currentPosition.getAccountId().equals(mess.getMessage().getUser_send())){
