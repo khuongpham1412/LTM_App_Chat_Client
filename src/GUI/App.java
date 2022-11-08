@@ -10,6 +10,8 @@ import Models.ResponseModel.GetAllMessageResponse;
 import Models.ResponseModel.MessItemResponse;
 import Utils.Constants;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -18,7 +20,10 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 
 /**
  *
@@ -40,6 +45,9 @@ public class App extends javax.swing.JFrame {
     public App() {
         initComponents();
         setBackground(new Color(0, 0, 0, 0));
+        ImageIcon img = new ImageIcon(getClass().getResource("../Assets/home.jpg"));
+        JLabel lb = new JLabel(img, JLabel.CENTER);
+        panelContent.add(lb);
         panelLeft2.addEventJListSelected(new EventJlistSelected() {
             @Override
             public void selected(int index) {
@@ -229,6 +237,16 @@ public class App extends javax.swing.JFrame {
 //        }
 //        return null;
 //    }
+    public void setPanelContent() throws IOException{
+        System.out.println("DA VAO");
+//        BufferedImage myPicture = ImageIO.read(new File(""));
+        ImageIcon img = new ImageIcon(getClass().getResource("../Assets/home.jpg"));
+        JLabel lb = new JLabel(img, JLabel.CENTER);
+        panelContent.removeAll();
+        panelContent.add(lb);
+        panelContent.repaint();
+        panelContent.revalidate();
+    }
     
     private void setPanel(JComponent comp){
         panelContent.removeAll();

@@ -4,6 +4,8 @@
  */
 package Layout;
 
+import Enum.Status;
+import Models.RequestModel.DataRequest;
 import Models.ResponseModel.GetAllMessageResponse;
 import Models.ResponseModel.MessItemResponse;
 import Utils.Constants;
@@ -14,6 +16,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import javax.swing.JScrollPane;
+import Common.Common;
+import Models.RequestModel.UpdateUserRoomRequest;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -78,7 +85,7 @@ public class PanelRight extends javax.swing.JPanel {
     public void setListMessage(ArrayList<GetAllMessageResponse> messages){
         this.messages = messages;
         listMess1.reset();
-        if(!this.messages.isEmpty() && this.messages.get(0).getMessage().getType().equals("PRIVATE")){
+        if(!this.messages.isEmpty() && this.messages.get(0).getRoomType().equals("PRIVATE")){
             btnPermission.setText("Block");
         }else{
             btnPermission.setText("Leave Group");
@@ -128,6 +135,7 @@ public class PanelRight extends javax.swing.JPanel {
         lbName = new javax.swing.JLabel();
         btnPermission = new javax.swing.JButton();
         lbStatus = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
 
         setOpaque(false);
 
@@ -163,6 +171,16 @@ public class PanelRight extends javax.swing.JPanel {
         lbName.setText("Username");
 
         btnPermission.setText("Permission");
+        btnPermission.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnPermissionMouseClicked(evt);
+            }
+        });
+        btnPermission.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnPermissionKeyPressed(evt);
+            }
+        });
 
         lbStatus.setText("Status");
 
@@ -197,13 +215,28 @@ public class PanelRight extends javax.swing.JPanel {
                 .addGap(0, 10, Short.MAX_VALUE))
         );
 
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 131, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(textInput1, javax.swing.GroupLayout.DEFAULT_SIZE, 1136, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(textInput1, javax.swing.GroupLayout.PREFERRED_SIZE, 999, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -212,9 +245,49 @@ public class PanelRight extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(textInput1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(textInput1, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnPermissionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnPermissionKeyPressed
+        // TODO add your handling code here:
+        //if(btnPermission.getText().equals("Leave Group")){
+//            System.out.println("Event leave group start...");
+//            DataRequest<String> request = new DataRequest<>();
+//            request.setName("LEAVE_GROUP_REQUEST");
+//            request.setStatus(Status.SUCCESS);
+//            request.setRequest("");
+//            
+//            try {
+//                Common.write(request);
+//            } catch (IOException ex) {
+//                Logger.getLogger(PanelRight.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }else if(btnPermission.getText().equals("Block")){
+//            
+//        }
+    }//GEN-LAST:event_btnPermissionKeyPressed
+
+    private void btnPermissionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPermissionMouseClicked
+        // TODO add your handling code here:
+        if(btnPermission.getText().trim().equals("Leave Group")){
+            DataRequest<UpdateUserRoomRequest> request = new DataRequest<>();
+            request.setName("LEAVE_GROUP_REQUEST");
+            request.setStatus(Status.SUCCESS);
+            UpdateUserRoomRequest data = new UpdateUserRoomRequest(Constants.currentPosition.getRoomId(), Constants.infomation.getId());
+            request.setRequest(data);
+            
+            try {
+                Common.write(request);
+            } catch (IOException ex) {
+                Logger.getLogger(PanelRight.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else if(btnPermission.getText().equals("Block")){
+            
+        }
+    }//GEN-LAST:event_btnPermissionMouseClicked
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -231,6 +304,7 @@ public class PanelRight extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPermission;
     private Helper.ImageAvatar imageAvatar1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;

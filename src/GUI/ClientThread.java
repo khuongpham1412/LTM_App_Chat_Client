@@ -100,6 +100,19 @@ public class ClientThread implements Runnable{
                         app.resetPanelLeft();
                         System.out.println("CREATE GROUP SUCCESS!");
                     }
+                    case "LEAVE_GROUP_RESPONSE" -> {
+                        MessItemResponse data = (MessItemResponse) response.getData();
+                        for(MessItemResponse i : Constants.messItems){
+                            if(data.getRoomId().equals(i.getRoomId())){
+                                Constants.messItems.remove(i);
+                                break;
+                            }
+                        }
+                        app.resetPanelLeft();
+                        app.setPanelContent();
+                        Constants.currentPosition = null;
+                        Constants.currentPositionIndex = -1;
+                    }
                     case "UPDATE_ACCOUNT_ONLINE_RESPONSE" -> {
                         String userId = (String) response.getData();
                         Constants.accOnline.add(userId);
