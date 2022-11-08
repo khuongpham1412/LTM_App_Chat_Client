@@ -17,10 +17,9 @@ import Models.ResponseModel.MessItemResponse;
 import Utils.Constants;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -34,6 +33,11 @@ public class ClientThread implements Runnable{
     public void run() {
         listen();
     }
+    
+//    public void showFormLogin(Login login){
+//        this.loginForm = login;
+//        this.loginForm.setVisible(true);
+//    }
     
     public void write(Object obj) throws IOException{
         Constants.oos.writeObject(obj);
@@ -61,9 +65,17 @@ public class ClientThread implements Runnable{
                             request.setStatus(Status.SUCCESS);
 
                             write(request);
+                            loginForm.setVisible(false);
+                        }else if(response.getStatus().equals(Status.WARNING)){
+                            JOptionPane.showMessageDialog(null, response.getData().toString());
+                            return;
+                        }else if(response.getStatus().equals(Status.ERROR)){
+                            JOptionPane.showMessageDialog(null, response.getData().toString());
+                            return;
                         }
                     }
                     case "GET_ALL_ACCOUNTS_MESSAGGETED_RESPONSE" -> {
+                        System.out.println("hi 2");
                         if(response.getStatus().equals(Status.SUCCESS)){
                             ArrayList<MessItemResponse> messItems = (ArrayList<MessItemResponse>) response.getData();
                             Constants.messItems = messItems;
@@ -89,6 +101,7 @@ public class ClientThread implements Runnable{
                         }
                     }
                     case "GET_ALL_ACCOUNTS_ONLINE_RESPONSE" ->  {
+                        System.out.println("hi 1");
                         ArrayList<String> accOnline = (ArrayList<String>) response.getData();
                         Constants.accOnline = accOnline;
                         app.updateAccountOnlineLeft(Constants.accOnline);

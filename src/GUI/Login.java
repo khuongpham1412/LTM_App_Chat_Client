@@ -26,6 +26,7 @@ public class Login extends javax.swing.JFrame {
     public static Socket socket;
     public static ObjectOutputStream oos;
     public static ObjectInputStream ois;
+    
 
     /**
      * Creates new form Login
@@ -46,6 +47,7 @@ public class Login extends javax.swing.JFrame {
             //read to socket using ObjectInputStream
             ois = new ObjectInputStream(socket.getInputStream());
             ClientThread clientThread = new ClientThread();
+            clientThread.setLoginForm(this);
             Thread t = new Thread(clientThread);
             t.start();
 
@@ -79,9 +81,19 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnLogin.setText("Login");
+        btnLogin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnLoginMouseClicked(evt);
+            }
+        });
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLoginActionPerformed(evt);
+            }
+        });
+        btnLogin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnLoginKeyPressed(evt);
             }
         });
 
@@ -131,7 +143,6 @@ public class Login extends javax.swing.JFrame {
 
 //            ClientThread client = new ClientThread();
 //            client.setLoginForm(this);
-            this.setVisible(false);
 
             Constants.oos.writeObject(request);
             Constants.oos.flush();
@@ -141,9 +152,43 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 
+    private void btnLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoginMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_btnLoginMouseClicked
+
+    private void btnLoginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnLoginKeyPressed
+        // TODO add your handling code here:
+//        try {
+//            DataRequest request = new DataRequest();
+//            request.setName("LOGIN_REQUEST");
+//            request.setStatus(Status.SUCCESS);
+//            Account account = new Account();
+//            String username = txtUsername.getText().trim();
+//            String password = txtPassword.getText().trim();
+//            account.setUsername(username);
+//            account.setPassword(password);
+//            request.setRequest(account);
+//
+////            ClientThread client = new ClientThread();
+////            client.setLoginForm(this);
+//
+//            Constants.oos.writeObject(request);
+//            Constants.oos.flush();
+////            return;
+//
+//        } catch (IOException ex) {
+//            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+    }//GEN-LAST:event_btnLoginKeyPressed
+
     /**
      * @param args the command line arguments
      */
+    
+    public void setHide(boolean status){
+        this.setVisible(status);
+    }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -172,6 +217,8 @@ public class Login extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Login().setVisible(true);
+//                ClientThread c = new ClientThread();
+//                c.showFormLogin(new Login());
             }
         });
     }
