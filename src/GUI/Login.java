@@ -154,37 +154,12 @@ public class Login extends javax.swing.JFrame {
 
     private void btnLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoginMouseClicked
         // TODO add your handling code here:
-        
     }//GEN-LAST:event_btnLoginMouseClicked
 
     private void btnLoginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnLoginKeyPressed
-        // TODO add your handling code here:
-//        try {
-//            DataRequest request = new DataRequest();
-//            request.setName("LOGIN_REQUEST");
-//            request.setStatus(Status.SUCCESS);
-//            Account account = new Account();
-//            String username = txtUsername.getText().trim();
-//            String password = txtPassword.getText().trim();
-//            account.setUsername(username);
-//            account.setPassword(password);
-//            request.setRequest(account);
-//
-////            ClientThread client = new ClientThread();
-////            client.setLoginForm(this);
-//
-//            Constants.oos.writeObject(request);
-//            Constants.oos.flush();
-////            return;
-//
-//        } catch (IOException ex) {
-//            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+
     }//GEN-LAST:event_btnLoginKeyPressed
 
-    /**
-     * @param args the command line arguments
-     */
     
     public void setHide(boolean status){
         this.setVisible(status);
@@ -214,12 +189,8 @@ public class Login extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Login().setVisible(true);
-//                ClientThread c = new ClientThread();
-//                c.showFormLogin(new Login());
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Login().setVisible(true);
         });
     }
 

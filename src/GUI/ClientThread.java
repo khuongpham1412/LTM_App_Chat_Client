@@ -25,26 +25,26 @@ import javax.swing.JOptionPane;
  *
  * @author Asus
  */
-public class ClientThread implements Runnable{
+public class ClientThread implements Runnable {
+
     App app;
     Login loginForm;
-    
+
     @Override
     public void run() {
         listen();
     }
-    
+
 //    public void showFormLogin(Login login){
 //        this.loginForm = login;
 //        this.loginForm.setVisible(true);
 //    }
-    
-    public void write(Object obj) throws IOException{
+    public void write(Object obj) throws IOException {
         Constants.oos.writeObject(obj);
         Constants.oos.flush();
     }
-    
-    public void setLoginForm(Login login){
+
+    public void setLoginForm(Login login) {
         this.loginForm = login;
     }
 
@@ -52,31 +52,31 @@ public class ClientThread implements Runnable{
         System.out.println("START LISTENNING...");
         DataResponse response = new DataResponse();
         try {
-            while(true){
+            while (true) {
                 response = (DataResponse) Constants.ois.readObject();
-                switch(response.getName()){
-                    case "LOGIN_RESPONSE" ->  {
-                        if(response.getStatus().equals(Status.SUCCESS)){
-                            Account account = (Account) response.getData();
-                            Constants.infomation = account;
-                            DataRequest request = new DataRequest();
-                            request.setName("GET_ALL_ACCOUNTS_MESSAGGETED_REQUEST");
-                            request.setRequest(Constants.infomation.getId());
-                            request.setStatus(Status.SUCCESS);
-
-                            write(request);
-                            loginForm.setVisible(false);
-                        }else if(response.getStatus().equals(Status.WARNING)){
-                            JOptionPane.showMessageDialog(null, response.getData().toString());
-                            return;
-                        }else if(response.getStatus().equals(Status.ERROR)){
-                            JOptionPane.showMessageDialog(null, response.getData().toString());
-                            return;
+                switch (response.getName()) {
+                    case "LOGIN_RESPONSE" -> {
+                        switch (response.getStatus()) {
+                            case SUCCESS -> {
+                                Account account = (Account) response.getData();
+                                Constants.infomation = account;
+                                DataRequest request = new DataRequest();
+                                request.setName("GET_ALL_ACCOUNTS_MESSAGGETED_REQUEST");
+                                request.setRequest(Constants.infomation.getId());
+                                request.setStatus(Status.SUCCESS);
+                                write(request);
+                                loginForm.setVisible(false);
+                            }
+                            case WARNING -> JOptionPane.showMessageDialog(null, response.getData().toString());
+                            case ERROR -> JOptionPane.showMessageDialog(null, response.getData().toString());
+                            default -> {
+                                break;
+                            }
                         }
+                        break;
                     }
                     case "GET_ALL_ACCOUNTS_MESSAGGETED_RESPONSE" -> {
-                        System.out.println("hi 2");
-                        if(response.getStatus().equals(Status.SUCCESS)){
+                        if (response.getStatus().equals(Status.SUCCESS)) {
                             ArrayList<MessItemResponse> messItems = (ArrayList<MessItemResponse>) response.getData();
                             Constants.messItems = messItems;
                             DataRequest request = new DataRequest();
@@ -86,22 +86,21 @@ public class ClientThread implements Runnable{
                             write(request);
                         }
                     }
-                    case "GET_ALL_ACCOUNTS_RESPONSE" ->  {
-                        if(response.getStatus().equals(Status.SUCCESS)){
+                    case "GET_ALL_ACCOUNTS_RESPONSE" -> {
+                        if (response.getStatus().equals(Status.SUCCESS)) {
                             ArrayList<Account> accounts = (ArrayList<Account>) response.getData();
                             Constants.accounts = accounts;
                             app = new App();
                             app.setVisible(true);
-                            
+
                             DataRequest request = new DataRequest();
                             request.setName("GET_ALL_ACCOUNTS_ONLINE_REQUEST");
                             request.setStatus(Status.SUCCESS);
                             write(request);
-                            
+
                         }
                     }
-                    case "GET_ALL_ACCOUNTS_ONLINE_RESPONSE" ->  {
-                        System.out.println("hi 1");
+                    case "GET_ALL_ACCOUNTS_ONLINE_RESPONSE" -> {
                         ArrayList<String> accOnline = (ArrayList<String>) response.getData();
                         Constants.accOnline = accOnline;
                         app.updateAccountOnlineLeft(Constants.accOnline);
@@ -115,8 +114,8 @@ public class ClientThread implements Runnable{
                     }
                     case "LEAVE_GROUP_RESPONSE" -> {
                         MessItemResponse data = (MessItemResponse) response.getData();
-                        for(MessItemResponse i : Constants.messItems){
-                            if(data.getRoomId().equals(i.getRoomId())){
+                        for (MessItemResponse i : Constants.messItems) {
+                            if (data.getRoomId().equals(i.getRoomId())) {
                                 Constants.messItems.remove(i);
                                 break;
                             }
@@ -141,30 +140,30 @@ public class ClientThread implements Runnable{
 //                        }else if(messages.isEmpty()){
 //                            app.setListMessage(messages);
 //                        }
-                        if(messages != null){
+                        if (messages != null) {
                             app.setListMessage(messages);
                         }
                     }
-                    case "SEND_MESSAGE_PRIVATE_RESPONSE" ->  {
-                        if(response.getStatus().equals(Status.SUCCESS)){
+                    case "SEND_MESSAGE_PRIVATE_RESPONSE" -> {
+                        if (response.getStatus().equals(Status.SUCCESS)) {
                             GetAllMessageResponse mess = (GetAllMessageResponse) response.getData();
 //                            MessItemResponse messs = new MessItemResponse();
 //                            messs.setNewMessage(mess.getMessage().getMessage());
 //                            messs.setRoomId(mess.getMessage().getIdRoom());
 //                            messs.setStatus(mess.getMessage().getStatus());
 //                            messs.setType(mess.getRoomType());
-                            
+
                             //Neu user dang focus vao ai do
-                            if(Constants.currentPosition != null){
+                            if (Constants.currentPosition != null) {
                                 //Cap nhat phia user gui
-                                if(mess.getMessage().getIdRoom().equals(Constants.currentPosition.getRoomId())&& mess.getMessage().getUser_send().equals(Constants.infomation.getId())){
+                                if (mess.getMessage().getIdRoom().equals(Constants.currentPosition.getRoomId()) && mess.getMessage().getUser_send().equals(Constants.infomation.getId())) {
 //                                    messs.setAccountId(mess.getMessage().getUser_receive());
 //                                    messs.setUsername(Constants.currentPosition.getUsername());
 //                                    app.updatePositionItemNewMessage(messs, "USER_SEND");
                                     app.sendNewMessage(mess);
                                 }
                                 //Neu user ben nhan dang focus vao cuoc tro chuyen do
-                                if(mess.getMessage().getIdRoom().equals(Constants.currentPosition.getRoomId()) && !mess.getMessage().getUser_send().equals(Constants.infomation.getId())){
+                                if (mess.getMessage().getIdRoom().equals(Constants.currentPosition.getRoomId()) && !mess.getMessage().getUser_send().equals(Constants.infomation.getId())) {
 //                                    for(MessItemResponse item : Constants.messItems){
 //                                        if(item.getRoomId().equals(mess.getMessage().getIdRoom())){
 //                                            messs.setAccountId(mess.getMessage().getUser_send());
@@ -174,9 +173,8 @@ public class ClientThread implements Runnable{
 //                                    }
 //                                    app.updatePositionItemNewMessage(messs, "USER_RECEIVED_FOCUS");
                                     app.sendNewMessage(mess);
-                                }
-                                //Neu user ben nhan khong focus vao cuoc tro chuyen do
-                                else if(!mess.getMessage().getIdRoom().equals(Constants.currentPosition.getRoomId()) && !mess.getMessage().getUser_send().equals(Constants.infomation.getId())){
+                                } //Neu user ben nhan khong focus vao cuoc tro chuyen do
+                                else if (!mess.getMessage().getIdRoom().equals(Constants.currentPosition.getRoomId()) && !mess.getMessage().getUser_send().equals(Constants.infomation.getId())) {
 //                                    for(MessItemResponse item : Constants.messItems){
 //                                       if(item.getRoomId().equals(mess.getMessage().getIdRoom())){
 //                                           messs.setAccountId(mess.getMessage().getUser_send());
@@ -187,42 +185,41 @@ public class ClientThread implements Runnable{
 //                                    app.updatePositionItemNewMessage(messs, "TEST1");
                                 }
                                 String name = "";
-                                for(Account acc : Constants.accounts){
-                                    if(mess.getMessage().getUser_receive().equals(acc.getId())){
+                                for (Account acc : Constants.accounts) {
+                                    if (mess.getMessage().getUser_receive().equals(acc.getId())) {
                                         name = acc.getUsername();
                                         break;
                                     }
                                 }
-                                if(Constants.currentPosition.getRoomId().equals("") && Constants.infomation.getId().equals(mess.getMessage().getUser_send())){
+                                if (Constants.currentPosition.getRoomId().equals("") && Constants.infomation.getId().equals(mess.getMessage().getUser_send())) {
                                     Constants.currentPosition.setRoomId(mess.getMessage().getIdRoom());
                                     app.sendNewMessage(mess);
                                     Constants.messItems.add(new MessItemResponse(mess.getMessage().getUser_receive(), mess.getMessage().getIdRoom(), name, mess.getMessage().getMessage(), mess.getMessage().getStatus(), mess.getRoomType()));
                                 }
                             }
-                            
+
                             String name = "";
-                            for(Account acc : Constants.accounts){
-                                if(mess.getMessage().getUser_send().equals(acc.getId())){
+                            for (Account acc : Constants.accounts) {
+                                if (mess.getMessage().getUser_send().equals(acc.getId())) {
                                     name = acc.getUsername();
                                     break;
                                 }
                             }
                             //Neu user ben nhan chua focus vao ai hoac dang focus vao 1 nguoi khac
-                            if(Constants.currentPosition == null || (Constants.currentPosition != null && !Constants.currentPosition.getRoomId().equals("") && Constants.infomation.getId().equals(mess.getMessage().getUser_receive()))){
+                            if (Constants.currentPosition == null || (Constants.currentPosition != null && !Constants.currentPosition.getRoomId().equals("") && Constants.infomation.getId().equals(mess.getMessage().getUser_receive()))) {
                                 boolean check = true;
-                                for(MessItemResponse i: Constants.messItems){
-                                    if(mess.getMessage().getIdRoom().equals(i.getRoomId())){
+                                for (MessItemResponse i : Constants.messItems) {
+                                    if (mess.getMessage().getIdRoom().equals(i.getRoomId())) {
                                         check = false;
                                         break;
                                     }
                                 }
-                                if(check){
+                                if (check) {
                                     Constants.messItems.add(new MessItemResponse(mess.getMessage().getUser_send(), mess.getMessage().getIdRoom(), name, mess.getMessage().getMessage(), mess.getMessage().getStatus(), mess.getRoomType()));
                                     app.resetPanelLeft();
                                 }
-                            }
-                            //Neu user ben nhan dang focus vao
-                            else if(Constants.currentPosition != null && Constants.currentPosition.getRoomId().equals("") && Constants.currentPosition.getAccountId().equals(mess.getMessage().getUser_send())){
+                            } //Neu user ben nhan dang focus vao
+                            else if (Constants.currentPosition != null && Constants.currentPosition.getRoomId().equals("") && Constants.currentPosition.getAccountId().equals(mess.getMessage().getUser_send())) {
                                 Constants.messItems.add(new MessItemResponse(mess.getMessage().getUser_send(), mess.getMessage().getIdRoom(), name, mess.getMessage().getMessage(), mess.getMessage().getStatus(), mess.getRoomType()));
                                 app.sendNewMessage(mess);
                                 Constants.currentPosition.setRoomId(mess.getMessage().getIdRoom());
@@ -234,8 +231,8 @@ public class ClientThread implements Runnable{
                                 Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
                             }
 
-                            for(String item : Constants.accOnline){
-                                if(mess.getMessage().getUser_receive().equals(item)){
+                            for (String item : Constants.accOnline) {
+                                if (mess.getMessage().getUser_receive().equals(item)) {
                                     DataRequest request = new DataRequest();
                                     request.setName("UPDATE_STATUS_MESSAGE_REQUEST");
                                     mess.getMessage().setStatus(StatusMessage.RECEIVED.toString());
@@ -245,34 +242,127 @@ public class ClientThread implements Runnable{
                                     write(request);
                                 }
                             }
-                                    
+
                         }
                     }
-                    case "SEND_MESSAGE_GROUP_RESPONSE" ->  {
-                        if(response.getStatus().equals(Status.SUCCESS)){
+                    case "SEND_FILE_PRIVATE_RESPONSE" -> {
+                        if (response.getStatus().equals(Status.SUCCESS)) {
                             GetAllMessageResponse mess = (GetAllMessageResponse) response.getData();
-                            if(Constants.currentPosition != null){
-                                if(mess.getMessage().getIdRoom().equals(Constants.currentPosition.getRoomId()) && !Constants.infomation.getId().equals(mess.getMessage().getUser_send())){
+                            //Neu user dang focus vao ai do
+                            if (Constants.currentPosition != null) {
+                                //Cap nhat phia user gui
+                                if (mess.getMessage().getIdRoom().equals(Constants.currentPosition.getRoomId()) && mess.getMessage().getUser_send().equals(Constants.infomation.getId())) {
                                     app.sendNewMessage(mess);
-                                }                              
-                                else{}                           
+                                }
+                                //Neu user ben nhan dang focus vao cuoc tro chuyen do
+                                if (mess.getMessage().getIdRoom().equals(Constants.currentPosition.getRoomId()) && !mess.getMessage().getUser_send().equals(Constants.infomation.getId())) {                                   
+                                    app.sendNewMessage(mess);
+                                } //Neu user ben nhan khong focus vao cuoc tro chuyen do
+                                else if (!mess.getMessage().getIdRoom().equals(Constants.currentPosition.getRoomId()) && !mess.getMessage().getUser_send().equals(Constants.infomation.getId())) {
+//                                    
+                                }
+                                String name = "";
+                                for (Account acc : Constants.accounts) {
+                                    if (mess.getMessage().getUser_receive().equals(acc.getId())) {
+                                        name = acc.getUsername();
+                                        break;
+                                    }
+                                }
+                                if (Constants.currentPosition.getRoomId().equals("") && Constants.infomation.getId().equals(mess.getMessage().getUser_send())) {
+                                    Constants.currentPosition.setRoomId(mess.getMessage().getIdRoom());
+                                    app.sendNewMessage(mess);
+                                    Constants.messItems.add(new MessItemResponse(mess.getMessage().getUser_receive(), mess.getMessage().getIdRoom(), name, mess.getMessage().getMessage(), mess.getMessage().getStatus(), mess.getRoomType()));
+                                }
                             }
-                            if(Constants.infomation.getId().equals(mess.getMessage().getUser_send())){
+
+                            String name = "";
+                            for (Account acc : Constants.accounts) {
+                                if (mess.getMessage().getUser_send().equals(acc.getId())) {
+                                    name = acc.getUsername();
+                                    break;
+                                }
+                            }
+                            //Neu user ben nhan chua focus vao ai hoac dang focus vao 1 nguoi khac
+                            if (Constants.currentPosition == null || (Constants.currentPosition != null && !Constants.currentPosition.getRoomId().equals("") && Constants.infomation.getId().equals(mess.getMessage().getUser_receive()))) {
+                                boolean check = true;
+                                for (MessItemResponse i : Constants.messItems) {
+                                    if (mess.getMessage().getIdRoom().equals(i.getRoomId())) {
+                                        check = false;
+                                        break;
+                                    }
+                                }
+                                if (check) {
+                                    Constants.messItems.add(new MessItemResponse(mess.getMessage().getUser_send(), mess.getMessage().getIdRoom(), name, mess.getMessage().getMessage(), mess.getMessage().getStatus(), mess.getRoomType()));
+                                    app.resetPanelLeft();
+                                }
+                            } //Neu user ben nhan dang focus vao
+                            else if (Constants.currentPosition != null && Constants.currentPosition.getRoomId().equals("") && Constants.currentPosition.getAccountId().equals(mess.getMessage().getUser_send())) {
+                                Constants.messItems.add(new MessItemResponse(mess.getMessage().getUser_send(), mess.getMessage().getIdRoom(), name, mess.getMessage().getMessage(), mess.getMessage().getStatus(), mess.getRoomType()));
+                                app.sendNewMessage(mess);
+                                Constants.currentPosition.setRoomId(mess.getMessage().getIdRoom());
+//                                app.resetPanelLeft();
+                            }
+                            try {
+                                Thread.sleep(1500);
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+
+                            for (String item : Constants.accOnline) {
+                                if (mess.getMessage().getUser_receive().equals(item)) {
+                                    DataRequest request = new DataRequest();
+                                    request.setName("UPDATE_STATUS_MESSAGE_REQUEST");
+                                    mess.getMessage().setStatus(StatusMessage.RECEIVED.toString());
+                                    request.setRequest(mess);
+                                    request.setStatus(Status.SUCCESS);
+
+                                    write(request);
+                                }
+                            }
+
+                        }
+                    }
+                    case "SEND_MESSAGE_GROUP_RESPONSE" -> {
+                        if (response.getStatus().equals(Status.SUCCESS)) {
+                            GetAllMessageResponse mess = (GetAllMessageResponse) response.getData();
+                            if (Constants.currentPosition != null) {
+                                if (mess.getMessage().getIdRoom().equals(Constants.currentPosition.getRoomId()) && !Constants.infomation.getId().equals(mess.getMessage().getUser_send())) {
+                                    app.sendNewMessage(mess);
+                                } else {
+                                }
+                            }
+                            if (Constants.infomation.getId().equals(mess.getMessage().getUser_send())) {
                                 app.sendNewMessage(mess);
                             }
                         }
+                        break;
+                    }
+                    case "SEND_FILE_GROUP_RESPONSE" -> {
+                        if (response.getStatus().equals(Status.SUCCESS)) {
+                            GetAllMessageResponse mess = (GetAllMessageResponse) response.getData();
+                            if (Constants.currentPosition != null) {
+                                if (mess.getMessage().getIdRoom().equals(Constants.currentPosition.getRoomId()) && !Constants.infomation.getId().equals(mess.getMessage().getUser_send())) {
+                                    app.sendNewMessage(mess);
+                                } else {
+                                }
+                            }
+                            if (Constants.infomation.getId().equals(mess.getMessage().getUser_send())) {
+                                app.sendNewMessage(mess);
+                            }
+                        }
+                        break;
                     }
                     case "UPDATE_STATUS_MESSAGE_RESPONSE" -> {
                         GetAllMessageResponse mess = (GetAllMessageResponse) response.getData();
-                        if(mess.getMessage().getStatus().equals(StatusMessage.RECEIVED.toString())){
-                            if(Constants.currentPosition != null){
+                        if (mess.getMessage().getStatus().equals(StatusMessage.RECEIVED.toString())) {
+                            if (Constants.currentPosition != null) {
                                 //Neu ben gui gui id phong = id phong dang focus
                                 //+ User gui dang focus vao room nay nen ben user gui luon chay ham nay
-                                if(mess.getMessage().getIdRoom().equals(Constants.currentPosition.getRoomId())){
+                                if (mess.getMessage().getIdRoom().equals(Constants.currentPosition.getRoomId())) {
                                     app.updateStatusMessage(mess);
-                                    if(mess.getMessage().getIdRoom().equals(Constants.currentPosition.getRoomId()) && !mess.getMessage().getUser_send().equals(Constants.infomation.getId())){
+                                    if (mess.getMessage().getIdRoom().equals(Constants.currentPosition.getRoomId()) && !mess.getMessage().getUser_send().equals(Constants.infomation.getId())) {
                                         try {
-                                        Thread.sleep(1500);
+                                            Thread.sleep(1500);
                                         } catch (InterruptedException ex) {
                                             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
                                         }
@@ -285,11 +375,11 @@ public class ClientThread implements Runnable{
                                         write(request);
                                     }
                                 }
-                                if(Constants.currentPosition.getRoomId().equals("")){
+                                if (Constants.currentPosition.getRoomId().equals("")) {
                                     app.updateStatusMessage(mess);
-                                    if(Constants.currentPosition.getRoomId().equals("") && !mess.getMessage().getUser_send().equals(Constants.infomation.getId())){
+                                    if (Constants.currentPosition.getRoomId().equals("") && !mess.getMessage().getUser_send().equals(Constants.infomation.getId())) {
                                         try {
-                                        Thread.sleep(1500);
+                                            Thread.sleep(1500);
                                         } catch (InterruptedException ex) {
                                             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
                                         }
@@ -302,20 +392,20 @@ public class ClientThread implements Runnable{
                                         write(request);
                                     }
                                 }
-                            }  
+                            }
                         }
-                        if(mess.getMessage().getStatus().equals(StatusMessage.SEEN.toString())){
+                        if (mess.getMessage().getStatus().equals(StatusMessage.SEEN.toString())) {
                             app.updateStatusMessage(mess);
                         }
                     }
                     case "RESET_PANEL_LEFT_RESPONSE" -> {
-                        if(response.getStatus().equals(Status.SUCCESS)){
+                        if (response.getStatus().equals(Status.SUCCESS)) {
                             ArrayList<MessItemResponse> messItems = (ArrayList<MessItemResponse>) response.getData();
                             Constants.messItems = messItems;
                             app.resetPanelLeft();
                         }
                     }
-                    default ->  {
+                    default -> {
                         System.out.println("Option not exists !!!");
                     }
                 }
@@ -324,5 +414,5 @@ public class ClientThread implements Runnable{
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
 }

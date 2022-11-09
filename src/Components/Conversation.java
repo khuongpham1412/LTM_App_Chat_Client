@@ -59,8 +59,20 @@ public class Conversation extends javax.swing.JPanel {
         messageLeft2 = new Components.MessageLeft();
         lbNotice = new javax.swing.JLabel();
 
+        messageRight2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                messageRight2MouseClicked(evt);
+            }
+        });
+
         lbStatus.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lbStatus.setText("status");
+
+        messageLeft2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                messageLeft2MouseClicked(evt);
+            }
+        });
 
         lbNotice.setBackground(new java.awt.Color(255, 255, 255));
         lbNotice.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -101,6 +113,16 @@ public class Conversation extends javax.swing.JPanel {
                         .addGap(21, 21, 21))))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void messageLeft2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_messageLeft2MouseClicked
+        // TODO add your handling code here:
+        System.out.println("START DOWNLOAD...");
+    }//GEN-LAST:event_messageLeft2MouseClicked
+
+    private void messageRight2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_messageRight2MouseClicked
+        // TODO add your handling code here:
+        System.out.println("START DOWNLOAD...");
+    }//GEN-LAST:event_messageRight2MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

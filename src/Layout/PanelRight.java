@@ -17,18 +17,30 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import javax.swing.JScrollPane;
 import Common.Common;
+import Enum.StatusMessage;
+import Enum.TypeMessage;
+import Models.Message;
+import Models.RequestModel.SendFileRequest;
 import Models.RequestModel.UpdateUserRoomRequest;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Date;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Asus
  */
 public class PanelRight extends javax.swing.JPanel {
-
+    
     private ArrayList<GetAllMessageResponse> messages = new ArrayList<>();
+
     /**
      * Creates new form PanelRight
      */
@@ -41,22 +53,22 @@ public class PanelRight extends javax.swing.JPanel {
         jScrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.getVerticalScrollBar().setBackground(new Color(98, 132, 255));
         jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(5, 0));
-        if(Constants.currentPosition != null){
+        if (Constants.currentPosition != null) {
             lbName.setText(Constants.currentPosition.getUsername());
         }
     }
     
-    public void updateUsername(){
-        if(Constants.currentPosition != null){
+    public void updateUsername() {
+        if (Constants.currentPosition != null) {
             lbName.setText(Constants.currentPosition.getUsername());
         }
         updateStatusOnline();
     }
     
-    public void updateAccountOnline(ArrayList<String> accOnline){
-        if(Constants.accOnline != null && Constants.currentPosition != null){
-            for(String acc : Constants.accOnline){
-                if(Constants.currentPosition.getAccountId().equals(acc)){
+    public void updateAccountOnline(ArrayList<String> accOnline) {
+        if (Constants.accOnline != null && Constants.currentPosition != null) {
+            for (String acc : Constants.accOnline) {
+                if (Constants.currentPosition.getAccountId().equals(acc)) {
                     lbStatus.setText("Online");
                     imageAvatar1.setGradientColor1(new java.awt.Color(102, 255, 102));
                     imageAvatar1.setGradientColor2(new java.awt.Color(42, 199, 80));
@@ -66,32 +78,32 @@ public class PanelRight extends javax.swing.JPanel {
         }
     }
     
-    public void updateStatusOnline(){
+    public void updateStatusOnline() {
         lbStatus.setText("Ofline");
         imageAvatar1.setGradientColor1(new java.awt.Color(255, 255, 255, 0));
         imageAvatar1.setGradientColor2(new java.awt.Color(255, 255, 255, 0));
-        if(Constants.accOnline != null){
-            for(String acc : Constants.accOnline){
-            if(Constants.currentPosition.getAccountId().equals(acc)){
-                lbStatus.setText("Online");
-                imageAvatar1.setGradientColor1(new java.awt.Color(102, 255, 102));
-                imageAvatar1.setGradientColor2(new java.awt.Color(42, 199, 80));
-                break;
+        if (Constants.accOnline != null) {
+            for (String acc : Constants.accOnline) {
+                if (Constants.currentPosition.getAccountId().equals(acc)) {
+                    lbStatus.setText("Online");
+                    imageAvatar1.setGradientColor1(new java.awt.Color(102, 255, 102));
+                    imageAvatar1.setGradientColor2(new java.awt.Color(42, 199, 80));
+                    break;
+                }
             }
-        }
         }
     }
     
-    public void setListMessage(ArrayList<GetAllMessageResponse> messages){
+    public void setListMessage(ArrayList<GetAllMessageResponse> messages) {
         this.messages = messages;
         listMess1.reset();
-        if(!this.messages.isEmpty() && this.messages.get(0).getRoomType().equals("PRIVATE")){
+        if (!this.messages.isEmpty() && this.messages.get(0).getRoomType().equals("PRIVATE")) {
             btnPermission.setText("Block");
-        }else{
+        } else {
             btnPermission.setText("Leave Group");
         }
         
-        for(GetAllMessageResponse item : this.messages){
+        for (GetAllMessageResponse item : this.messages) {
             listMess1.addItem(item);
         }
         try {
@@ -102,17 +114,17 @@ public class PanelRight extends javax.swing.JPanel {
         getLastMessage();
     }
     
-    public void updateStatusMessage(GetAllMessageResponse message){
-        listMess1.update(message, this.messages.size()-1);
+    public void updateStatusMessage(GetAllMessageResponse message) {
+        listMess1.update(message, this.messages.size() - 1);
     }
     
-    public void sendNewMessage(GetAllMessageResponse mess){
+    public void sendNewMessage(GetAllMessageResponse mess) {
         this.messages.add(mess);
         listMess1.addItem(mess);
         getLastMessage();
     }
     
-    private void getLastMessage(){
+    private void getLastMessage() {
         int lastIndex = listMess1.getModel().getSize() - 1;
         listMess1.ensureIndexIsVisible(lastIndex);
     }
@@ -136,6 +148,7 @@ public class PanelRight extends javax.swing.JPanel {
         btnPermission = new javax.swing.JButton();
         lbStatus = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
 
         setOpaque(false);
 
@@ -215,15 +228,33 @@ public class PanelRight extends javax.swing.JPanel {
                 .addGap(0, 10, Short.MAX_VALUE))
         );
 
+        jButton1.setText("FILE");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
+        jButton1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton1KeyPressed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 131, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(62, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -272,7 +303,7 @@ public class PanelRight extends javax.swing.JPanel {
 
     private void btnPermissionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPermissionMouseClicked
         // TODO add your handling code here:
-        if(btnPermission.getText().trim().equals("Leave Group")){
+        if (btnPermission.getText().trim().equals("Leave Group")) {
             DataRequest<UpdateUserRoomRequest> request = new DataRequest<>();
             request.setName("LEAVE_GROUP_REQUEST");
             request.setStatus(Status.SUCCESS);
@@ -284,26 +315,90 @@ public class PanelRight extends javax.swing.JPanel {
             } catch (IOException ex) {
                 Logger.getLogger(PanelRight.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }else if(btnPermission.getText().equals("Block")){
+        } else if (btnPermission.getText().equals("Block")) {
             
         }
     }//GEN-LAST:event_btnPermissionMouseClicked
 
+    private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jButton1KeyPressed
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        FileInputStream fileInputStream = null;
+        byte[] fileContentByte = null;
+        String fileName = null;
+        
+        try {
+            // TODO add your handling code here:
+            final JFileChooser fileDialog = new JFileChooser();
+            int returnVal = fileDialog.showOpenDialog(null);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fileDialog.getSelectedFile();
+                try {
+                    fileInputStream = new FileInputStream(file.getAbsolutePath());
+                    fileName = file.getName();
+                    byte[] fileNameByte = fileName.getBytes();
+                    
+                    fileContentByte = new byte[(int) file.length()];
+                    fileInputStream.read(fileContentByte);
+                    
+                    SendFileRequest fileRequest = new SendFileRequest();
+                    String name = new Date().getTime() + fileName;
+                    Message mess = new Message();
+                    mess.setId(UUID.randomUUID().toString());
+                    mess.setType(TypeMessage.FILE.toString());
+                    mess.setStatus(StatusMessage.SENT.toString());
+                    mess.setMessage(name);
+                    mess.setIdRoom(Constants.currentPosition.getRoomId());
+                    mess.setUser_send(Constants.infomation.getId());
+                    fileRequest.setFileContentByte(fileContentByte);
+                    fileRequest.setFileName(name);
+                    fileRequest.setMessage(mess);
+                    DataRequest request = new DataRequest();
+                    request.setStatus(Status.SUCCESS);
+
+                    request.setRequest(fileContentByte);
+                    if (Constants.currentPosition.getType().equals("PRIVATE")) {
+                        request.setName("SEND_FILE_PRIVATE_REQUEST");
+                        mess.setUser_receive(Constants.currentPosition.getAccountId());
+                        request.setRequest(fileRequest);
+                        Common.write(request);
+
+                    } else {
+                        request.setName("SEND_FILE_GROUP_REQUEST");
+                        mess.setUser_receive("ALL");
+                        request.setRequest(fileRequest);
+                        Common.write(request);
+                    }
+                    fileInputStream.close();
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(PanelRight.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                System.out.println("exit");
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(PanelRight.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1MouseClicked
+    
     @Override
     protected void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D)g;
+        Graphics2D g2 = (Graphics2D) g;
         GradientPaint gradient = new GradientPaint(0, 0, Color.decode("#f2fcfe"), 0, getHeight(), Color.decode("#b2fefa"));
         g2.setPaint(gradient);
         g2.fillRect(0, 0, getWidth(), getHeight());
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
-        super.paintComponent(g); 
+        super.paintComponent(g);
     }
 
-    
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPermission;
     private Helper.ImageAvatar imageAvatar1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

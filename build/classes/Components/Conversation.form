@@ -57,6 +57,9 @@
   </Layout>
   <SubComponents>
     <Component class="Components.MessageRight" name="messageRight2">
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="messageRight2MouseClicked"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lbStatus">
       <Properties>
@@ -67,6 +70,9 @@
       </Properties>
     </Component>
     <Component class="Components.MessageLeft" name="messageLeft2">
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="messageLeft2MouseClicked"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lbNotice">
       <Properties>

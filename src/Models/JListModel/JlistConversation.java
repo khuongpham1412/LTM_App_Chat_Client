@@ -5,11 +5,19 @@
 package Models.JListModel;
 
 import Components.Conversation;
+import Enum.TypeMessage;
 import Models.ResponseModel.GetAllMessageResponse;
 import java.awt.Component;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.ListCellRenderer;
 
 /**
@@ -66,7 +74,43 @@ public class JlistConversation<E extends Object> extends JList<E>{
                     data = new GetAllMessageResponse();
                 }
                 if(isSelected){
-                    System.out.println(index);
+                    if(data.getMessage().getType().equals(TypeMessage.FILE.toString())){
+                        int option = JOptionPane.showConfirmDialog(null, "Do you want download...");
+                        if(option == JOptionPane.YES_OPTION){
+                            try {
+                                    FileInputStream in = new FileInputStream("D:\\SGU\\JavaSwing\\LTM-AppChatServer\\src\\Assets\\Files\\" + data.getMessage().getMessage());
+                                    byte[] fileContentBytes = in.readAllBytes();
+                                    FileOutputStream out = new FileOutputStream("C:\\Users\\Asus\\Downloads\\" + data.getMessage().getMessage());
+                                    out.write(fileContentBytes);
+                                    in.close();
+                                    out.close();
+                                } catch (FileNotFoundException ex) {
+                                    Logger.getLogger(JlistConversation.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (IOException ex) {
+                                    Logger.getLogger(JlistConversation.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                        }
+//                        switch (option) {
+//                            case 0 -> {
+//                                try {
+//                                    FileInputStream in = new FileInputStream("D:\\SGU\\JavaSwing\\LTM-AppChatServer\\src\\Assets\\Files\\" + data.getMessage().getMessage());
+//                                    byte[] fileContentBytes = in.readAllBytes();
+//                                    FileOutputStream out = new FileOutputStream("C:\\Users\\Asus\\Downloads\\" + data.getMessage().getMessage());
+//                                    out.write(fileContentBytes);
+//                                } catch (FileNotFoundException ex) {
+//                                    Logger.getLogger(JlistConversation.class.getName()).log(Level.SEVERE, null, ex);
+//                                } catch (IOException ex) {
+//                                    Logger.getLogger(JlistConversation.class.getName()).log(Level.SEVERE, null, ex);
+//                                }
+//                            }
+//                            case 1 -> {
+//                            }
+//                            case 2 -> {
+//                            }
+//                            default -> {
+//                            }
+//                        }
+                    }
                 }
                 item = new Conversation(data);
                 item.hideNotice();
